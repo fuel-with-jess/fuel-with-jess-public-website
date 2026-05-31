@@ -43,7 +43,6 @@
     .page { display: none; padding-top: 72px; min-height: 100vh; }
     .page.active { display: block; }
     main { padding-top: 72px; }
-    main:has(.form-header) { padding-top: 0; }
 
     /* ── BUTTONS ── */
     .btn-primary {
