@@ -38,12 +38,14 @@ to match** — search for "SHARED NAV" and "SHARED FOOTER" comments to find them
 
 ## Workflow rule — always open a PR
 
-Never commit directly to `main`. For *any* change — even a typo fix — do this:
+Never commit directly to `main`. **At the start of every session**, before touching any files:
 
 1. Check out `main` and pull the latest (`git checkout main && git pull`).
 2. Create a new branch from `main` (e.g. `claude/fix-typo-services-page`).
-3. Commit on that branch.
+3. Make all changes and commits on that branch.
 4. Push and open a pull request **against `main`** (`gh pr create --base main`).
+
+Never work on an existing branch from a previous session — always start fresh from `main`. This ensures the PR contains exactly the changes from the current task and nothing else.
 
 Why: Netlify builds a deploy preview URL for every PR opened against `main`,
 so Jess can click a link and see the change live before it ships. PRs branched
