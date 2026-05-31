@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>New Client Intake Form | Fuel with Jess</title>
+  <meta name="description" content="New client intake form for Fuel with Jess nutrition coaching. Complete before your onboarding call." />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+<!-- SHARED NAV -->
+<nav id="main-nav">
+  <a class="nav-logo" href="index.html" style="display:inline-flex;align-items:center;padding:0;"><img src="images/logo.png" alt="Fuel with Jess" style="height:48px;width:auto;" /></a>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="index.html" class="active-nav">Home</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="services.html">Services</a></li>
+    <li><a href="testimonials.html" style="display:none;">Testimonials</a></li>
+    <li><a href="contact.html">Contact</a></li>
+    <li><a href="legal.html">Legal</a></li>
+    <li><a href="apply.html" class="nav-cta">Apply Now</a></li>
+  </ul>
+  <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<main>
+  <div class="subpage-scroll">
+<!-- HEADER -->
+  <div class="form-header">
+    <button class="form-back-btn" onclick="window.location.href='contact.html'">← Back to Contact</button>
+    <p class="header-eyebrow">New Client Intake Form</p>
+    <h1>Let's build your<br><em>personalized plan.</em></h1>
+    <p>The more detail you share, the better I can prepare for our onboarding call and hit the ground running from minute one.</p>
+    <div class="header-badge"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0;"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg> Your answers are kept strictly confidential</div>
+    <div class="form-header-divider"><span>Takes about 10–15 minutes</span></div>
+  </div>
+
+  <div class="progress-wrap">
+    <div class="progress-bar" id="intakeform-progress-bar" style="width:0%"></div>
+  </div>
+  <p class="progress-label" id="intakeform-progress-label">Get started below</p>
+
+  <div class="form-outer">
+    <div id="intakeform-body">
+
+      <!-- ── SECTION: PERSONAL INFO ── -->
+      <div class="section-divider"><span class="sd-label">Personal Info</span></div>
+
+      <div class="question-card">
+        <p class="q-label">Tell me the basics.</p>
+        <p class="q-hint">We'll start simple.</p>
+        <div class="f-row" style="margin-bottom:10px;">
+          <div class="f-field"><label class="f-label">First name *</label><input class="f-input" type="text" id="q-first" placeholder="Jane" oninput="intakeFormUpdateProgress()" /></div>
+          <div class="f-field"><label class="f-label">Last name *</label><input class="f-input" type="text" id="q-last" placeholder="Smith" oninput="intakeFormUpdateProgress()" /></div>
+        </div>
+        <div class="f-row" style="margin-bottom:10px;">
+          <div class="f-field"><label class="f-label">Email *</label><input class="f-input" type="email" id="q-email" placeholder="you@email.com" oninput="intakeFormUpdateProgress()" /></div>
+          <div class="f-field"><label class="f-label">Phone</label><input class="f-input" type="tel" id="q-phone" placeholder="(619) 555-0100" /></div>
+        </div>
+        <div class="f-row">
+          <div class="f-field"><label class="f-label">Age</label><input class="f-input" type="number" id="q-age" placeholder="30" min="16" max="99" /></div>
+          <div class="f-field"><label class="f-label">Current weight</label><input class="f-input" type="text" id="q-weight" placeholder="150 lbs" /></div>
+        </div>
+      </div>
+
+      <!-- ── SECTION: GOALS ── -->
+      <div class="section-divider"><span class="sd-label">Goals & Vision</span></div>
+
+      <div class="question-card">
+        <p class="q-label">What are your specific, measurable goals?</p>
+        <p class="q-hint">Be as specific as possible — numbers, dates, and feelings all count.</p>
+        <textarea class="f-textarea" id="q-goals" placeholder="e.g. Lose 15 lbs by August, be able to run a 5K, feel confident in a swimsuit, understand my macros well enough to eat out without stressing..." oninput="intakeFormUpdateProgress()"></textarea>
+      </div>
+
+      <div class="question-card">
+        <p class="q-label">What does success feel like 6 months from now?</p>
+        <p class="q-hint">Paint me a picture — how do you feel, what are you doing, what's different?</p>
+        <textarea class="f-textarea" id="q-success" placeholder="e.g. I wake up with energy, I'm not thinking about food all day, I fit into clothes I stopped wearing, I know exactly what to eat before a workout..." oninput="intakeFormUpdateProgress()"></textarea>
+      </div>
+
+      <!-- ── SECTION: NUTRITION HISTORY ── -->
+      <div class="section-divider"><span class="sd-label">Nutrition History</span></div>
+
+      <div class="question-card">
+        <p class="q-label">Have you tracked macros or calories before?</p>
+        <p class="q-hint">No judgment — just want to know where to start.</p>
+        <div class="pill-group" id="tracked-group" style="margin-bottom:14px;">
+          <label class="pill-opt" onclick="togglePill(this)"><input type="radio" name="tracked" value="Never" onchange="intakeFormUpdateProgress()" /> Never</label>
+          <label class="pill-opt" onclick="togglePill(this)"><input type="radio" name="tracked" value="Tried briefly" onchange="intakeFormUpdateProgress()" /> Tried briefly</label>
+          <label class="pill-opt" onclick="togglePill(this)"><input type="radio" name="tracked" value="On and off" onchange="intakeFormUpdateProgress()" /> On and off</label>
+          <label class="pill-opt" onclick="togglePill(this)"><input type="radio" name="tracked" value="Consistently" onchange="intakeFormUpdateProgress()" /> Consistently</label>
+        </div>
+        <div class="f-field">
+          <label class="f-label">Nutrition label reading — how comfortable are you?</label>
+          <div class="scale-labels"><span>1 — Not at all</span><span>5 — Very comfortable</span></div>
+          <div class="scale-options" id="label-scale">
+            <button type="button" class="scale-btn" onclick="selectScale('label-scale',this,'1')">1</button>
+            <button type="button" class="scale-btn" onclick="selectScale('label-scale',this,'2')">2</button>
+            <button type="button" class="scale-btn" onclick="selectScale('label-scale',this,'3')">3</button>
+            <button type="button" class="scale-btn" onclick="selectScale('label-scale',this,'4')">4</button>
+            <button type="button" class="scale-btn" onclick="selectScale('label-scale',this,'5')">5</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="question-card">
+        <p class="q-label">Describe a typical day of eating for you right now.</p>
+        <p class="q-hint">Walk me through it — breakfast through evening snacks. Don't clean it up, just be honest.</p>
+        <textarea class="f-textarea" id="q-typical-day" placeholder="e.g. Usually skip breakfast, coffee with creamer around 8am. Lunch is whatever's easy — often a sandwich or fast food. Dinner I cook most nights. Snack on chips or chocolate at night..." oninput="intakeFormUpdateProgress()" style="min-height:110px;"></textarea>
+      </div>
+
+      <div class="question-card">
+        <p class="q-label">Any foods you won't eat, can't eat, or are allergic to?</p>
+        <p class="q-hint">Include preferences and restrictions — nothing is off-limits to tell me.</p>
+        <input class="f-input" type="text" id="q-restrictions" placeholder="e.g. Dairy allergy, hate fish, vegetarian, no gluten, none..." />
+      </div>
+
+      <!-- ── SECTION: RELATIONSHIP WITH FOOD ── -->
+      <div class="section-divider"><span class="sd-label">Relationship with Food & Mindset</span></div>
+
+      <div class="question-card">
+        <p class="q-label">How would you describe your current relationship with food?</p>
+        <p class="q-hint">This is a safe space — there's no wrong answer. I want to understand where you're starting from.</p>
+        <div class="pill-group" id="food-rel-group" style="margin-bottom:14px;">
+          <label class="pill-opt" onclick="togglePill(this)"><input type="checkbox" value="Pretty healthy overall" onchange="intakeFormUpdateProgress()" /> Pretty healthy overall</label>
+          <label class="pill-opt" onclick="togglePill(this)"><input type="checkbox" value="Complicated — I overthink food" onchange="intakeFormUpdateProgress()" /> Complicated — I overthink food</label>
+          <label class="pill-opt" onclick="togglePill(this)"><input type="checkbox" value="Emotional eating patterns" onchange="intakeFormUpdateProgress()" /> Emotional eating patterns</label>
+          <label class="pill-opt" onclick="togglePill(this)"><input type="checkbox" value="All-or-nothing thinking" onchange="intakeFormUpdateProgress()" /> All-or-nothing thinking</label>
+          <label class="pill-opt" onclick="togglePill(this)"><input type="checkbox" value="Guilt around certain foods" onchange="intakeFormUpdateProgress()" /> Guilt around certain foods</label>
+          <label class="pill-opt" onclick="togglePill(this)"><input type="checkbox" value="I eat for fuel, not pleasure" onchange="intakeFormUpdateProgress()" /> I eat for fuel, not pleasure</label>
+        </div>
+        <textarea class="f-textarea" id="q-food-rel-detail" placeholder="Tell me more if you'd like..." style="min-height:70px;"></textarea>
+      </div>
+
+      <div class="question-card">
+        <p class="q-label">What's your biggest mindset challenge around food or your body?</p>
+        <p class="q-hint">This is one of the most important questions — your answer helps me tailor my coaching approach.</p>
+        <textarea class="f-textarea" id="q-mindset" placeholder="e.g. I know what to do but I can't stay consistent. I compare myself to others constantly. I've been at war with my body for years..." oninput="intakeFormUpdateProgress()" style="min-height:100px;"></textarea>
+      </div>
+
+      <!-- ── SECTION: EXERCISE ── -->
+      <div class="section-divider"><span class="sd-label">Exercise & Activity</span></div>
+
+      <div class="question-card">
+        <p class="q-label">How would you describe your current activity level?</p>
+        <p class="q-hint">Select all that apply and tell me more below.</p>
+        <div class="pill-group" id="activity-group" style="margin-bottom:14px;">
+          <label class="pill-opt" onclick="togglePill(this)"><input type="checkbox" value="Mostly sedentary" onchange="intakeFormUpdateProgress()" /> Mostly sedentary</label>
+          <label class="pill-opt" onclick="togglePill(this)"><input type="checkbox" value="Light walks / casual movement" onchange="intakeFormUpdateProgress()" /> Light walks / casual movement</label>
+          <label class="pill-opt" onclick="togglePill(this)"><input type="checkbox" value="Gym 1-3x/week" onchange="intakeFormUpdateProgress()" /> Gym 1–3x/week</label>
+          <label class="pill-opt" onclick="togglePill(this)"><input type="checkbox" value="Gym 4-5x/week" onchange="intakeFormUpdateProgress()" /> Gym 4–5x/week</label>
+          <label class="pill-opt" onclick="togglePill(this)"><input type="checkbox" value="Competitive athlete" onchange="intakeFormUpdateProgress()" /> Competitive athlete</label>
+          <label class="pill-opt" onclick="togglePill(this)"><input type="checkbox" value="Active job on my feet" onchange="intakeFormUpdateProgress()" /> Active job on my feet</label>
+        </div>
+        <input class="f-input" type="text" id="q-activity-detail" placeholder="Tell me more — what type of training, how long, any sports or competitions?" />
+      </div>
+
+      <!-- ── SECTION: SLEEP & STRESS ── -->
+      <div class="section-divider"><span class="sd-label">Sleep, Stress & Lifestyle</span></div>
+
+      <div class="question-card">
+        <p class="q-label">How's your sleep and stress level right now?</p>
+        <p class="q-hint">Both have a massive impact on nutrition and results — I want the real picture.</p>
+        <div class="f-row" style="margin-bottom:14px;">
+          <div class="f-field">
+            <label class="f-label">Average hours of sleep/night</label>
+            <div class="pill-group" id="sleep-group">
+              <label class="pill-opt" onclick="togglePill(this)"><input type="radio" name="sleep" value="Less than 5" /> &lt;5 hrs</label>
+              <label class="pill-opt" onclick="togglePill(this)"><input type="radio" name="sleep" value="5-6 hours" /> 5–6 hrs</label>
+              <label class="pill-opt" onclick="togglePill(this)"><input type="radio" name="sleep" value="7-8 hours" /> 7–8 hrs</label>
+              <label class="pill-opt" onclick="togglePill(this)"><input type="radio" name="sleep" value="8+ hours" /> 8+ hrs</label>
+            </div>
+          </div>
+        </div>
+        <div class="f-field">
+          <label class="f-label">Current stress level (1 = very low · 5 = very high)</label>
+          <div class="scale-labels"><span>1 — Low</span><span>5 — Very high</span></div>
+          <div class="scale-options" id="stress-scale">
+            <button type="button" class="scale-btn" onclick="selectScale('stress-scale',this,'1')">1</button>
+            <button type="button" class="scale-btn" onclick="selectScale('stress-scale',this,'2')">2</button>
+            <button type="button" class="scale-btn" onclick="selectScale('stress-scale',this,'3')">3</button>
+            <button type="button" class="scale-btn" onclick="selectScale('stress-scale',this,'4')">4</button>
+            <button type="button" class="scale-btn" onclick="selectScale('stress-scale',this,'5')">5</button>
+          </div>
+        </div>
+        <div class="f-field" style="margin-top:12px;">
+          <label class="f-label">Anything about your lifestyle I should factor in?</label>
+          <input class="f-input" type="text" id="q-lifestyle" placeholder="e.g. Travel often for work, night shift nurse, single parent, training for a marathon..." />
+        </div>
+      </div>
+
+      <!-- ── SECTION: HEALTH & SUPPLEMENTS ── -->
+      <div class="section-divider"><span class="sd-label">Health History & Supplements</span></div>
+
+      <div class="question-card">
+        <p class="q-label">Any medical conditions or medications I should know about?</p>
+        <p class="q-hint">All information is strictly confidential and used only to tailor your coaching safely.</p>
+        <textarea class="f-textarea" id="q-medical" placeholder="e.g. Hypothyroidism (on Synthroid), PCOS, Type 2 diabetes, history of disordered eating, none..." oninput="intakeFormUpdateProgress()"></textarea>
+      </div>
+
+      <div class="question-card">
+        <p class="q-label">What supplements or vitamins are you currently taking?</p>
+        <p class="q-hint">Include protein powder, creatine, pre-workout, vitamins, anything relevant.</p>
+        <textarea class="f-textarea" id="q-supps" placeholder="e.g. Protein powder (whey, 1x/day), Vitamin D, Fish oil, Pre-workout before training, Magnesium at night, None..." style="min-height:80px;"></textarea>
+      </div>
+
+      <!-- ── SECTION: AGREEMENTS ── -->
+      <div class="section-divider"><span class="sd-label">Agreements & Confirmation</span></div>
+
+      <div class="question-card">
+        <p class="q-label">Please confirm the following before submitting.</p>
+        <p class="q-hint">These protect both of us and ensure we start on the right foot.</p>
+        <div style="display:flex;flex-direction:column;gap:10px;margin-top:4px;">
+          <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;font-size:13px;color:var(--bark-lt);line-height:1.5;">
+            <input type="checkbox" id="agree-coaching" style="margin-top:2px;accent-color:var(--terra);flex-shrink:0;" onchange="intakeFormUpdateProgress()" />
+            I have read and agree to the Coaching Services Agreement
+          </label>
+          <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;font-size:13px;color:var(--bark-lt);line-height:1.5;">
+            <input type="checkbox" id="agree-waiver" style="margin-top:2px;accent-color:var(--terra);flex-shrink:0;" onchange="intakeFormUpdateProgress()" />
+            I have read and agree to the Liability Waiver & Release of Claims
+          </label>
+          <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;font-size:13px;color:var(--bark-lt);line-height:1.5;">
+            <input type="checkbox" id="agree-privacy" style="margin-top:2px;accent-color:var(--terra);flex-shrink:0;" onchange="intakeFormUpdateProgress()" />
+            I have read and agree to the Privacy Policy
+          </label>
+          <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;font-size:13px;color:var(--bark-lt);line-height:1.5;">
+            <input type="checkbox" id="agree-accurate" style="margin-top:2px;accent-color:var(--terra);flex-shrink:0;" onchange="intakeFormUpdateProgress()" />
+            The information I've provided is accurate to the best of my knowledge
+          </label>
+          <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;font-size:13px;color:var(--bark-lt);line-height:1.5;">
+            <input type="checkbox" id="agree-physician" style="margin-top:2px;accent-color:var(--terra);flex-shrink:0;" onchange="intakeFormUpdateProgress()" />
+            I understand this is nutrition coaching, not medical advice, and I will consult my physician if I have health concerns
+          </label>
+        </div>
+      </div>
+
+      <!-- SUBMIT -->
+      <button class="submit-btn" onclick="submitIntakeForm(event)">Submit my intake form →</button>
+      <p class="submit-note">Jess will review this before your onboarding call so you can hit the ground running from minute one.</p>
+
+    </div>
+
+    <!-- SUCCESS -->
+    <div class="success-screen" id="intakeform-success">
+      <div class="success-icon" style="background:var(--mist);color:var(--sage);"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0;"><polyline points="20 6 9 17 4 12"/></svg></div>
+      <h2>You're all set!</h2>
+      <p>Thank you for taking the time to fill this out so thoroughly. I'll review everything before our call so we can dive straight into building your plan.</p>
+      <div class="next-step">
+        <strong>What happens next:</strong><br>
+        Jess will review your intake answers before your onboarding session. Come ready to ask questions and get excited — this is where the real work begins.
+      </div>
+    </div>
+  </div>
+  </div>
+</div>
+</main>
+
+<!-- SHARED FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <img src="images/logo.png" alt="Fuel with Jess" style="height:80px;width:auto;margin-bottom:12px;filter:brightness(0) invert(1);opacity:0.9;" />
+        <h3 style="display:none;">Fuel with Jess</h3>
+        <p>NASM Certified nutrition coaching for people who want to understand their bodies, build lasting habits, and actually enjoy the process.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Navigate</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About Jess</a></li>
+          <li><a href="services.html">Services</a></li>
+          <li><a href="testimonials.html" style="display:none;">Testimonials</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a href="contact.html">Contact</a></li>
+    <li><a href="legal.html">Legal</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Get Started</h4>
+        <ul>
+          <li><a href="apply.html">Book a Discovery Call</a></li>
+          <li><a href="mailto:fuelwithjess@gmail.com">Email Jess</a></li>
+          <li><a href="https://instagram.com/fuel_with_jess" target="_blank">@fuel_with_jess</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p class="footer-copy">© 2026 Fuel with Jess · All rights reserved</p>
+      <div class="footer-socials">
+        <a href="https://instagram.com/fuel_with_jess" target="_blank" style="display:flex;align-items:center;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0;"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg></a>
+        <a href="mailto:fuelwithjess@gmail.com" style="display:flex;align-items:center;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0;"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+  <script src="js/nav.js"></script>
+  <script src="js/forms.js"></script>
+</body>
+</html>

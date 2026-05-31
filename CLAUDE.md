@@ -20,7 +20,7 @@ legal.html            Terms / Privacy / Coaching Agreement / Waiver (tabbed)
 css/styles.css        All styling. Color palette is at the top in :root.
 js/nav.js             Hamburger menu, nav shadow on scroll, active-link highlight.
 js/forms.js           Pill/scale UI, plus apply + intake form submission.
-images/               All site images. Logo is logo.png; hero is hero-bg.jpg.
+images/               All site images: logo.png, jess-photo.jpg, nasm-badge.png, home-image.png.
 ```
 
 ## How to edit common things

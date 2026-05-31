@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Apply | Fuel with Jess</title>
+  <meta name="description" content="Apply to work with Jess. Answer 5 quick questions and she'll reach out within 48 hours." />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+<!-- SHARED NAV -->
+<nav id="main-nav">
+  <a class="nav-logo" href="index.html" style="display:inline-flex;align-items:center;padding:0;"><img src="images/logo.png" alt="Fuel with Jess" style="height:48px;width:auto;" /></a>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="services.html">Services</a></li>
+    <li><a href="testimonials.html" style="display:none;">Testimonials</a></li>
+    <li><a href="contact.html">Contact</a></li>
+    <li><a href="legal.html">Legal</a></li>
+    <li><a href="apply.html" class="nav-cta active-nav">Apply Now</a></li>
+  </ul>
+  <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<main>
+  <div class="subpage-scroll">
+<!-- HEADER -->
+  <div class="form-header">
+    <button class="form-back-btn" onclick="window.location.href='contact.html'">← Back to Contact</button>
+    <p class="header-eyebrow">New Client Application</p>
+    <h1>Let's see if we're a<br><em>perfect fit.</em></h1>
+    <p>Take 3–5 minutes to fill this out. Your answers help me understand where you're at so our discovery call is focused and valuable from minute one.</p>
+    <div class="header-badge"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0;"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg> NASM Certified Nutrition Coach &nbsp;·&nbsp; Fuel with Jess</div>
+    <div class="form-header-divider"><span>Takes about 3–5 minutes</span></div>
+  </div>
+
+  <!-- PROGRESS -->
+  <div class="progress-wrap">
+    <div class="progress-bar" id="appform-progress-bar" style="width: 0%"></div>
+  </div>
+  <p class="progress-label" id="appform-progress-label">0 of 5 complete</p>
+
+  <!-- FORM -->
+  <div class="form-outer">
+    <div id="appform-body">
+
+      <!-- Q1: Personal info -->
+      <div class="question-card">
+        <p class="q-number">Question 1</p>
+        <p class="q-label">First, tell me a little about yourself.</p>
+        <p class="q-hint">Name and contact info so I can follow up after reviewing your application.</p>
+        <div class="f-row" style="margin-bottom:12px;">
+          <div><label style="font-size:12px;color:var(--bark-lt);display:block;margin-bottom:5px;">First name *</label>
+          <input class="f-input" type="text" id="app-q-first" placeholder="Jane" oninput="appFormUpdateProgress()" /></div>
+          <div><label style="font-size:12px;color:var(--bark-lt);display:block;margin-bottom:5px;">Last name *</label>
+          <input class="f-input" type="text" id="app-q-last" placeholder="Smith" oninput="appFormUpdateProgress()" /></div>
+        </div>
+        <div class="f-row">
+          <div><label style="font-size:12px;color:var(--bark-lt);display:block;margin-bottom:5px;">Email *</label>
+          <input class="f-input" type="email" id="app-q-email" placeholder="you@email.com" oninput="appFormUpdateProgress()" /></div>
+          <div><label style="font-size:12px;color:var(--bark-lt);display:block;margin-bottom:5px;">Phone</label>
+          <input class="f-input" type="tel" id="app-q-phone" placeholder="(619) 555-0100" /></div>
+        </div>
+      </div>
+
+      <!-- Q2: Primary goal -->
+      <div class="question-card">
+        <p class="q-number">Question 2</p>
+        <p class="q-label">What is your primary goal right now?</p>
+        <p class="q-hint">Select all that apply — be honest, even if it's more than one.</p>
+        <div class="pill-group" id="app-goals-group">
+          <label class="pill-opt" onclick="togglePill(this)"><input type="checkbox" value="Lose fat" onchange="appFormUpdateProgress()" /> Lose fat</label>
+          <label class="pill-opt" onclick="togglePill(this)"><input type="checkbox" value="Build muscle" onchange="appFormUpdateProgress()" /> Build muscle</label>
+          <label class="pill-opt" onclick="togglePill(this)"><input type="checkbox" value="Improve athletic performance" onchange="appFormUpdateProgress()" /> Improve athletic performance</label>
+          <label class="pill-opt" onclick="togglePill(this)"><input type="checkbox" value="Better relationship with food" onchange="appFormUpdateProgress()" /> Better relationship with food</label>
+          <label class="pill-opt" onclick="togglePill(this)"><input type="checkbox" value="Learn nutrition fundamentals" onchange="appFormUpdateProgress()" /> Learn nutrition fundamentals</label>
+          <label class="pill-opt" onclick="togglePill(this)"><input type="checkbox" value="Maintenance & longevity" onchange="appFormUpdateProgress()" /> Maintenance & longevity</label>
+        </div>
+        <textarea class="f-textarea" id="app-q-goals-detail" placeholder="Tell me more — what does this goal mean to you personally?" style="margin-top:14px;min-height:80px;"></textarea>
+      </div>
+
+      <!-- Q3: Biggest struggle -->
+      <div class="question-card">
+        <p class="q-number">Question 3</p>
+        <p class="q-label">What's your biggest struggle when it comes to nutrition right now?</p>
+        <p class="q-hint">Don't overthink it — what's the one thing that keeps getting in your way?</p>
+        <textarea class="f-textarea" id="app-q-struggle" placeholder="e.g. I know what to eat but can't stay consistent. I eat well during the week but fall apart on weekends..." oninput="appFormUpdateProgress()"></textarea>
+      </div>
+
+      <!-- Q4: Timeline -->
+      <div class="question-card">
+        <p class="q-number">Question 4</p>
+        <p class="q-label">Do you have a specific timeline or event you're working toward?</p>
+        <p class="q-hint">Wedding, competition, vacation, doctor's appointment — or just ready to start now.</p>
+        <div class="pill-group" style="margin-bottom:14px;" id="app-timeline-group">
+          <label class="pill-opt" onclick="togglePill(this)"><input type="radio" name="app-timeline" value="Ready to start now" onchange="appFormUpdateProgress()" /> Ready to start now</label>
+          <label class="pill-opt" onclick="togglePill(this)"><input type="radio" name="app-timeline" value="Event in 1-3 months" onchange="appFormUpdateProgress()" /> Event in 1–3 months</label>
+          <label class="pill-opt" onclick="togglePill(this)"><input type="radio" name="app-timeline" value="Event in 3-6 months" onchange="appFormUpdateProgress()" /> Event in 3–6 months</label>
+          <label class="pill-opt" onclick="togglePill(this)"><input type="radio" name="app-timeline" value="No specific deadline" onchange="appFormUpdateProgress()" /> No specific deadline</label>
+        </div>
+        <input class="f-input" type="text" id="app-q-timeline-detail" placeholder="Tell me more (optional) — e.g. wedding on Sept 14th..." />
+      </div>
+
+      <!-- Q5: Commitment / readiness -->
+      <div class="question-card">
+        <p class="q-number">Question 5</p>
+        <p class="q-label">How ready are you to invest time and energy into this right now?</p>
+        <p class="q-hint">Be real — 1 means life is chaotic and this isn't top priority, 5 means you're all in and ready to go.</p>
+        <div class="scale-wrap">
+          <div class="scale-labels"><span>1 — Not quite ready</span><span>5 — 100% committed</span></div>
+          <div class="scale-options" id="app-readiness-scale">
+            <button type="button" class="scale-btn" onclick="selectScale('app-readiness-scale', this, '1')">1</button>
+            <button type="button" class="scale-btn" onclick="selectScale('app-readiness-scale', this, '2')">2</button>
+            <button type="button" class="scale-btn" onclick="selectScale('app-readiness-scale', this, '3')">3</button>
+            <button type="button" class="scale-btn" onclick="selectScale('app-readiness-scale', this, '4')">4</button>
+            <button type="button" class="scale-btn" onclick="selectScale('app-readiness-scale', this, '5')">5</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q6: Anything else -->
+      <div class="question-card">
+        <p class="q-number">Anything else?</p>
+        <p class="q-label">Is there anything else you'd like me to know before our call?</p>
+        <p class="q-hint">Optional — but this is your chance to share anything that feels important.</p>
+        <textarea class="f-textarea" id="app-q-extra" placeholder="Share anything on your mind..." style="min-height:80px;"></textarea>
+      </div>
+
+      <!-- SUBMIT -->
+      <div class="form-footer-wrap">
+        <button class="submit-btn" onclick="submitApplicationStandalone(event)">Submit my application →</button>
+        <p class="submit-note">After reviewing your application, I'll reach out within 48 hours to share a link to book your free discovery call.</p>
+      </div>
+
+    </div>
+
+    <!-- SUCCESS -->
+    <div class="success-screen" id="appform-success">
+      <div class="success-icon" style="background:var(--mist);color:var(--sage);"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0;"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
+      <h2>Application received!</h2>
+      <p>Thank you — you're being redirected to book your free discovery call right now.</p>
+      <div class="next-step">
+        <strong>Redirecting to the booking page…</strong><br>
+        If you are not redirected in a few seconds, <a href="https://calendar.app.google/6AvVuMnZChAvvg8Q9" target="_blank" style="color:var(--terra);font-weight:600;">click here to book your call →</a>
+      </div>
+    </div>
+  </div>
+  </div>
+</div>
+</main>
+
+<!-- SHARED FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <img src="images/logo.png" alt="Fuel with Jess" style="height:80px;width:auto;margin-bottom:12px;filter:brightness(0) invert(1);opacity:0.9;" />
+        <h3 style="display:none;">Fuel with Jess</h3>
+        <p>NASM Certified nutrition coaching for people who want to understand their bodies, build lasting habits, and actually enjoy the process.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Navigate</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About Jess</a></li>
+          <li><a href="services.html">Services</a></li>
+          <li><a href="testimonials.html" style="display:none;">Testimonials</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a href="contact.html">Contact</a></li>
+    <li><a href="legal.html">Legal</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Get Started</h4>
+        <ul>
+          <li><a href="apply.html">Book a Discovery Call</a></li>
+          <li><a href="mailto:fuelwithjess@gmail.com">Email Jess</a></li>
+          <li><a href="https://instagram.com/fuel_with_jess" target="_blank">@fuel_with_jess</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p class="footer-copy">© 2026 Fuel with Jess · All rights reserved</p>
+      <div class="footer-socials">
+        <a href="https://instagram.com/fuel_with_jess" target="_blank" style="display:flex;align-items:center;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0;"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg></a>
+        <a href="mailto:fuelwithjess@gmail.com" style="display:flex;align-items:center;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0;"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+  <script src="js/nav.js"></script>
+  <script src="js/forms.js"></script>
+</body>
+</html>
