@@ -31,10 +31,29 @@
     nav.scrolled { box-shadow: 0 2px 24px rgba(30,42,26,0.08); }
     .nav-logo { display: inline-flex; align-items: center; text-decoration: none; cursor: pointer; }
     .nav-logo span { color: var(--terra); }
+
+    /* ── LOGO MARK ── */
+    .logo-mark { display: inline-flex; flex-direction: column; align-items: flex-start; line-height: 1; text-decoration: none; gap: 3px; }
+    .logo-fuel { font-family: 'Jost', sans-serif; font-weight: 700; font-size: 26px; letter-spacing: 0.13em; text-transform: uppercase; color: var(--bark); display: flex; align-items: center; gap: 3px; }
+    .logo-flame { color: var(--sage); flex-shrink: 0; width: 18px; height: 26px; }
+    .logo-wordmark { display: flex; align-items: baseline; gap: 6px; padding-left: 1px; border-top: 1px solid var(--tan); padding-top: 4px; width: 100%; }
+    .logo-with { font-family: 'Jost', sans-serif; font-size: 7.5px; font-weight: 600; letter-spacing: 0.24em; text-transform: uppercase; color: var(--sage); }
+    .logo-jess { font-family: 'Playfair Display', serif; font-style: italic; font-size: 14px; color: var(--bark); }
+    .logo-mark--white .logo-fuel { color: var(--white); }
+    .logo-mark--white .logo-flame { color: var(--sage-lt); }
+    .logo-mark--white .logo-wordmark { border-top-color: rgba(249,252,247,0.25); }
+    .logo-mark--white .logo-with { color: var(--sage-lt); }
+    .logo-mark--white .logo-jess { color: var(--white); }
+    .logo-mark--hero .logo-fuel { font-size: 68px; letter-spacing: 0.13em; }
+    .logo-mark--hero .logo-flame { width: 48px; height: 68px; }
+    .logo-mark--hero .logo-wordmark { gap: 14px; padding-top: 10px; }
+    .logo-mark--hero .logo-with { font-size: 13px; letter-spacing: 0.3em; }
+    .logo-mark--hero .logo-jess { font-size: 30px; }
+
     .nav-links { display: flex; gap: 36px; list-style: none; }
     .nav-links a { font-size: 13px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--bark-lt); text-decoration: none; cursor: pointer; transition: color 0.2s; }
     .nav-links a:hover { color: var(--terra); }
-    .nav-cta { background: var(--terra); color: var(--white) !important; padding: 9px 20px; border-radius: 50px; transition: background 0.2s !important; }
+    .nav-cta { background: var(--terra); color: var(--white) !important; padding: 9px 20px; border-radius: 6px; transition: background 0.2s !important; }
     .nav-cta:hover { background: var(--terra-dk) !important; }
     .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; }
     .hamburger span { display: block; width: 24px; height: 2px; background: var(--bark); border-radius: 2px; transition: all 0.3s; }
@@ -48,7 +67,7 @@
     .btn-primary {
       display: inline-flex; align-items: center; gap: 8px;
       background: var(--terra); color: var(--white);
-      padding: 14px 28px; border-radius: 50px; font-size: 14px; font-weight: 600;
+      padding: 14px 28px; border-radius: 6px; font-size: 14px; font-weight: 600;
       letter-spacing: 0.04em; text-decoration: none; border: none; cursor: pointer;
       transition: background 0.2s, transform 0.15s;
     }
@@ -56,7 +75,7 @@
     .btn-secondary {
       display: inline-flex; align-items: center; gap: 8px;
       background: transparent; color: var(--bark);
-      padding: 14px 28px; border-radius: 50px; font-size: 14px; font-weight: 500;
+      padding: 14px 28px; border-radius: 6px; font-size: 14px; font-weight: 500;
       letter-spacing: 0.04em; text-decoration: none; border: 1.5px solid var(--tan); cursor: pointer;
       transition: border-color 0.2s, color 0.2s, transform 0.15s;
     }
