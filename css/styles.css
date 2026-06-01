@@ -156,13 +156,13 @@
     }
     .food-strip-overlay {
       position: absolute; inset: 0;
-      background: linear-gradient(90deg, rgba(30,42,26,0.88) 0%, rgba(30,42,26,0.4) 60%, transparent 100%);
+      background: linear-gradient(90deg, rgba(15,24,13,0.94) 0%, rgba(15,24,13,0.80) 55%, rgba(15,24,13,0.50) 85%, rgba(15,24,13,0.25) 100%);
       display: flex; align-items: center;
     }
     .food-strip-text { padding: 0 80px; max-width: 560px; }
-    .food-strip-text h2 { font-family: 'Playfair Display', serif; font-size: 36px; color: var(--white); line-height: 1.25; margin-bottom: 16px; }
+    .food-strip-text h2 { font-family: 'Playfair Display', serif; font-size: 36px; color: var(--white); line-height: 1.25; margin-bottom: 16px; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
     .food-strip-text h2 em { font-style: italic; color: var(--sage-lt); }
-    .food-strip-text p { font-size: 16px; color: rgba(249,252,247,0.85); line-height: 1.7; font-weight: 300; margin-bottom: 24px; }
+    .food-strip-text p { font-size: 16px; color: rgba(249,252,247,0.95); line-height: 1.7; font-weight: 400; margin-bottom: 24px; text-shadow: 0 1px 6px rgba(0,0,0,0.5); }
 
     /* journey section */
     .journey-section { padding: 88px 48px; background: var(--sand); }
