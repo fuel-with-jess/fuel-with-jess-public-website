@@ -313,6 +313,7 @@
     .f-success p { font-size: 14px; color: var(--bark-lt); line-height: 1.6; font-weight: 300; }
 
     /* ── FOOTER ── */
+    .footer-brand img { filter: brightness(3.2) saturate(0.5); }
     footer { background: var(--bark); padding: 60px 48px 32px; }
     .footer-inner { max-width: 1100px; margin: 0 auto; }
     .footer-top { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 48px; padding-bottom: 40px; border-bottom: 1px solid rgba(196,218,188,0.1); margin-bottom: 32px; }
@@ -332,7 +333,7 @@
     /* ── HERO SPLIT LAYOUT ── */
     .hero-split { display: grid; grid-template-columns: 1fr 1fr; gap: 0; align-items: center; width: 100%; }
     .hero-logo-col { display: flex; justify-content: center; align-items: center; padding-right: 56px; border-right: 1px solid rgba(245,240,232,0.15); }
-    .hero-logo-img { width: min(380px, 90%); height: auto; filter: drop-shadow(0 6px 40px rgba(0,0,0,0.32)); }
+    .hero-logo-img { width: min(380px, 90%); height: auto; filter: brightness(3.5) saturate(0.55) drop-shadow(0 4px 32px rgba(0,0,0,0.3)); }
     .hero-text-col { display: flex; flex-direction: column; padding-left: 56px; }
 
     /* ── RESPONSIVE ── */
