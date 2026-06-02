@@ -105,7 +105,7 @@
     }
     .hero-overlay {
       position: absolute; inset: 0;
-      background: linear-gradient(135deg, rgba(30,54,16,0.90) 0%, rgba(52,82,24,0.74) 100%);
+      background: #7a9258;
     }
     .hero-inner {
       position: relative; z-index: 2; width: 100%; max-width: 1100px;
@@ -114,14 +114,14 @@
     .hero-eyebrow {
       display: inline-flex; align-items: center; gap: 10px;
       font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase;
-      color: var(--sage-lt); margin-bottom: 24px;
+      color: rgba(252,248,238,0.85); margin-bottom: 24px;
     }
-    .hero-eyebrow::before { content: ''; display: block; width: 28px; height: 1px; background: var(--sage-lt); }
+    .hero-eyebrow::before { content: ''; display: block; width: 28px; height: 1px; background: rgba(252,248,238,0.50); }
     .hero h1 {
       font-family: 'Playfair Display', serif; font-size: clamp(36px, 4.5vw, 62px);
       line-height: 1.1; color: var(--white); margin-bottom: 24px; max-width: 720px;
     }
-    .hero h1 em { font-style: italic; color: var(--sage-lt); }
+    .hero h1 em { font-style: italic; color: #d0e8b4; }
     .hero-desc { font-size: 18px; line-height: 1.75; color: rgba(249,252,247,0.88); max-width: 580px; margin-bottom: 40px; font-weight: 300; }
     .hero-btns { display: flex; gap: 16px; flex-wrap: wrap; }
     .hero-btns .btn-secondary { border-color: rgba(249,252,247,0.4); color: var(--white); }
