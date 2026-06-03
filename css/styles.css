@@ -6,8 +6,8 @@
       --tan:      #b8a880;
       --terra:    #3a5226;
       --terra-dk: #2b3d1a;
-      --sage:     #7c9848;
-      --sage-lt:  #a0bc5c;
+      --sage:     #637040;
+      --sage-lt:  #8fa050;
       --bark:     #1a2610;
       --bark-lt:  #364826;
       --mist:     #e4ddd0;
@@ -96,22 +96,22 @@
     .hero {
       position: relative; min-height: calc(100vh - 72px);
       display: flex; align-items: center; overflow: hidden;
-      background: #7a9258;
+      background: #637040;
     }
     .hero-bg-img {
       position: absolute; inset: 0;
       background-image: url('../images/cutting-board-bg.avif');
       background-size: cover; background-position: center;
-      opacity: 0.28;
+      opacity: 0.22;
     }
     .hero-overlay {
       position: absolute; inset: 0;
       background: linear-gradient(
         105deg,
-        rgba(120,140,82,0.92) 0%,
-        rgba(120,140,82,0.88) 45%,
-        rgba(120,140,82,0.72) 70%,
-        rgba(120,140,82,0.55) 100%
+        rgba(99,112,64,0.94) 0%,
+        rgba(99,112,64,0.90) 45%,
+        rgba(99,112,64,0.74) 70%,
+        rgba(99,112,64,0.52) 100%
       );
     }
     .hero-inner {
@@ -128,7 +128,7 @@
       font-family: 'Playfair Display', serif; font-size: clamp(36px, 4.5vw, 62px);
       line-height: 1.1; color: var(--white); margin-bottom: 24px; max-width: 720px;
     }
-    .hero h1 em { font-style: italic; color: #d0e8b4; }
+    .hero h1 em { font-style: italic; color: #c8dc90; }
     .hero-desc { font-size: 18px; line-height: 1.75; color: rgba(249,252,247,0.88); max-width: 580px; margin-bottom: 40px; font-weight: 300; }
     .hero-btns { display: flex; gap: 16px; flex-wrap: wrap; }
     .hero-btns .btn-secondary { border-color: rgba(249,252,247,0.4); color: var(--white); }
