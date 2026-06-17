@@ -108,10 +108,10 @@
       position: absolute; inset: 0;
       background: linear-gradient(
         105deg,
-        rgba(41,42,23,0.72) 0%,
-        rgba(41,42,23,0.58) 45%,
-        rgba(41,42,23,0.30) 70%,
-        rgba(41,42,23,0.12) 100%
+        rgba(41,42,23,0.50) 0%,
+        rgba(41,42,23,0.35) 45%,
+        rgba(41,42,23,0.12) 70%,
+        rgba(41,42,23,0.02) 100%
       );
     }
     .hero-inner {
