@@ -120,18 +120,18 @@
       margin: 0 auto; padding: 80px 48px;
     }
     .hero-eyebrow {
-      display: inline-flex; align-items: center; gap: 10px;
+      display: inline-flex; align-items: center; justify-content: center; gap: 10px;
       font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase;
-      color: rgba(236,229,217,0.85); margin-bottom: 24px;
+      color: rgba(236,229,217,0.85); margin-bottom: 0;
     }
-    .hero-eyebrow::before { content: ''; display: block; width: 28px; height: 1px; background: rgba(236,229,217,0.50); }
+    .hero-eyebrow::before { display: none; }
     .hero h1 {
       font-family: 'Lora', serif; font-size: clamp(36px, 4.5vw, 62px);
       line-height: 1.1; color: var(--white); margin-bottom: 24px; max-width: 720px;
     }
     .hero h1 em { font-style: italic; color: var(--terracotta); -webkit-text-stroke: 1.5px white; paint-order: stroke fill; }
-    .hero-desc { font-size: 18px; line-height: 1.75; color: var(--cream); max-width: 580px; margin-bottom: 40px; font-weight: 300; background: rgba(93,92,56,0.55); border-radius: 10px; padding: 16px 20px; }
-    .hero-btns { display: flex; gap: 16px; flex-wrap: wrap; }
+    .hero-desc { font-size: 18px; line-height: 1.75; color: #ffffff; max-width: 580px; margin-bottom: 40px; font-weight: 400; }
+    .hero-btns { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; }
     .hero-btns .btn-secondary { background: rgba(93,92,56,0.55); border-color: transparent; color: var(--cream); }
     .hero-btns .btn-secondary:hover { background: rgba(93,92,56,0.75); border-color: transparent; color: var(--cream); }
 
@@ -188,13 +188,9 @@
       background: var(--terra); border-radius: 24px; padding: 44px;
       position: relative; overflow: hidden;
     }
-    .journey-quote::before {
-      content: '"';' position: absolute; top: -10px; left: 20px;
-      font-family: 'Lora', serif; font-size: 120px; color: var(--terra);
-      opacity: 0.2; line-height: 1;
-    }
-    .journey-quote p { font-family: 'Lora', serif; font-size: 21px; font-style: italic; color: var(--cream); line-height: 1.6; position: relative; z-index: 1; margin-bottom: 20px; }
-    .journey-quote cite { font-size: 12px; color: var(--tan); letter-spacing: 0.08em; }
+    .journey-quote::before { display: none; }
+    .journey-quote p { font-family: 'Lora', serif; font-size: 21px; font-style: italic; color: var(--cream); line-height: 1.6; position: relative; z-index: 1; margin-bottom: 0; }
+    .journey-quote cite { display: block; font-size: 12px; color: var(--tan); letter-spacing: 0.08em; margin-top: 20px; }
 
     /* ═══════════════════════ ABOUT ═══════════════════════ */
     .about-hero {
@@ -202,8 +198,8 @@
       background: var(--terra); padding: 88px 48px; text-align: center;
     }
     .about-hero h1 { font-family: 'Lora', serif; font-size: clamp(36px, 5vw, 60px); color: var(--cream); margin-bottom: 16px; }
-    .about-hero h1 em { color: var(--sage-lt); font-style: italic; }
-    .about-hero p { font-size: 17px; color: var(--tan); max-width: 580px; margin: 0 auto; line-height: 1.7; font-weight: 300; }
+    .about-hero h1 em { color: var(--cream); font-style: italic; }
+    .about-hero p { font-size: 17px; color: var(--cream); max-width: 580px; margin: 0 auto; line-height: 1.7; font-weight: 300; }
 
     .about-body { max-width: 1100px; margin: 0 auto; padding: 80px 48px; display: grid; grid-template-columns: 340px 1fr; gap: 64px; align-items: start; }
     .about-photo { position: static; display: flex; flex-direction: column; align-items: stretch; width: 100%; }
@@ -339,10 +335,10 @@
 
 
     /* ── HERO SPLIT LAYOUT ── */
-    .hero-split { display: grid; grid-template-columns: 1fr 1fr; gap: 0; align-items: center; width: 100%; }
-    .hero-logo-col { display: flex; justify-content: center; align-items: center; padding-right: 56px; border-right: 1px solid rgba(236,229,217,0.15); }
-    .hero-logo-img { width: min(380px, 90%); height: auto; filter: drop-shadow(0 4px 28px rgba(0,0,0,0.18)); }
-    .hero-text-col { display: flex; flex-direction: column; padding-left: 56px; background: rgba(136,137,99,0.18); border-radius: 14px; padding: 32px 40px 32px 56px; }
+    .hero-split { display: flex; flex-direction: column; align-items: center; width: 100%; gap: 32px; }
+    .hero-logo-col { display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 16px; }
+    .hero-logo-img { width: min(380px, 90%); height: auto; filter: drop-shadow(0 4px 28px rgba(0,0,0,0.18)) brightness(1.6); }
+    .hero-text-col { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 0; }
 
     /* ── RESPONSIVE ── */
     @media (max-width: 900px) {
