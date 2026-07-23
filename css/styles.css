@@ -275,19 +275,9 @@
     .testimonials-hero h1 em { color: var(--terra); font-style: italic; }
     .testimonials-hero p { font-size: 17px; color: var(--bark-lt); max-width: 520px; margin: 0 auto; line-height: 1.7; font-weight: 300; }
     .testimonials-body { max-width: 1100px; margin: 0 auto; padding: 80px 48px; }
-    .testi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 48px; }
-    .testi-card { background: var(--white); border: 1px solid var(--sand); border-radius: 20px; padding: 28px; }
-    .testi-card.large { grid-column: span 2; background: var(--terra); }
-    .testi-card.large .testi-text, .testi-card.large .testi-name { color: var(--cream); }
-    .testi-card.large .testi-detail { color: var(--tan); }
-    .testi-card.large .testi-stars { color: #f5c842; }
-    .testi-stars { color: var(--terra); font-size: 14px; margin-bottom: 14px; }
-    .testi-text { font-family: 'Lora', serif; font-size: 16px; font-style: italic; line-height: 1.7; color: var(--bark); margin-bottom: 20px; }
-    .testi-name { font-size: 14px; font-weight: 600; color: var(--bark); }
-    .testi-detail { font-size: 12px; color: var(--bark-lt); font-weight: 300; }
-    .testi-placeholder { background: var(--mist); border: 1.5px dashed var(--sage-lt); border-radius: 20px; padding: 40px; text-align: center; }
-    .testi-placeholder h3 { font-family: 'Lora', serif; font-size: 22px; color: var(--bark); margin-bottom: 12px; }
-    .testi-placeholder p { font-size: 15px; color: var(--bark-lt); line-height: 1.7; font-weight: 300; margin-bottom: 24px; }
+    .testi-photo-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; margin-bottom: 48px; }
+    .testi-photo-card { border-radius: 20px; overflow: hidden; border: 1px solid var(--sand); }
+    .testi-photo-card img { display: block; width: 100%; height: auto; }
 
     /* ═══════════════════════ CONTACT ═══════════════════════ */
     .contact-hero { background: var(--cream); padding: 80px 48px 40px; text-align: center; }
@@ -382,8 +372,7 @@
       .about-body { grid-template-columns: 1fr; gap: 40px; padding: 60px 24px; }
       .about-photo { position: static; display: flex; flex-direction: column; align-items: center; width: 100%; }
       .tiers-grid { grid-template-columns: 1fr 1fr; }
-      .testi-grid { grid-template-columns: 1fr; }
-      .testi-card.large { grid-column: span 1; }
+      .testi-photo-grid { grid-template-columns: 1fr; }
       .contact-body { grid-template-columns: 1fr; gap: 48px; padding: 40px 24px 60px; }
       .footer-top { grid-template-columns: 1fr; gap: 32px; }
       .about-hero, .services-hero, .testimonials-hero, .contact-hero { padding: 60px 24px; }
