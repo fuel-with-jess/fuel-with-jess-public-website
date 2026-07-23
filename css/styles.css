@@ -288,6 +288,12 @@
     .testi-placeholder { background: var(--mist); border: 1.5px dashed var(--sage-lt); border-radius: 20px; padding: 40px; text-align: center; }
     .testi-placeholder h3 { font-family: 'Lora', serif; font-size: 22px; color: var(--bark); margin-bottom: 12px; }
     .testi-placeholder p { font-size: 15px; color: var(--bark-lt); line-height: 1.7; font-weight: 300; margin-bottom: 24px; }
+    .testi-photo-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; margin-bottom: 56px; }
+    .testi-photo-card { border-radius: 20px; overflow: hidden; border: 1px solid var(--sand); }
+    .testi-photo-card img { display: block; width: 100%; height: auto; }
+    .testi-section-divider { display: flex; align-items: center; gap: 16px; margin: 0 0 32px; }
+    .testi-section-divider span { font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--terra); white-space: nowrap; }
+    .testi-section-divider::before, .testi-section-divider::after { content: ''; flex: 1; height: 1px; background: var(--sand); }
 
     /* ═══════════════════════ CONTACT ═══════════════════════ */
     .contact-hero { background: var(--cream); padding: 80px 48px 40px; text-align: center; }
@@ -384,6 +390,7 @@
       .tiers-grid { grid-template-columns: 1fr 1fr; }
       .testi-grid { grid-template-columns: 1fr; }
       .testi-card.large { grid-column: span 1; }
+      .testi-photo-grid { grid-template-columns: 1fr; }
       .contact-body { grid-template-columns: 1fr; gap: 48px; padding: 40px 24px 60px; }
       .footer-top { grid-template-columns: 1fr; gap: 32px; }
       .about-hero, .services-hero, .testimonials-hero, .contact-hero { padding: 60px 24px; }
