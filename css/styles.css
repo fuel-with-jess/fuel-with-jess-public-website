@@ -277,6 +277,7 @@
     .testimonials-body { max-width: 1100px; margin: 0 auto; padding: 80px 48px; }
     .testi-photo-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; margin-bottom: 48px; }
     .testi-photo-card { border-radius: 20px; overflow: hidden; border: 1px solid var(--sand); }
+    .testi-photo-card:last-child:nth-child(odd) { grid-column: 1 / -1; max-width: calc(50% - 12px); margin: 0 auto; }
     .testi-photo-card img { display: block; width: 100%; height: auto; }
 
     /* ═══════════════════════ CONTACT ═══════════════════════ */
