@@ -151,6 +151,9 @@
     .meet-photo-b { margin-bottom: 40px; }
     .meet-text .btn-secondary { display: inline-flex; }
 
+    /* goals (homepage) */
+    .goals-section { padding: 88px 48px; max-width: 1200px; margin: 0 auto; }
+
     /* topics grid */
     .topics-section { padding: 88px 48px; max-width: 1200px; margin: 0 auto; }
     .topics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 40px; }
