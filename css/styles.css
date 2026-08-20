@@ -89,6 +89,7 @@
       color: var(--terra); margin-bottom: 16px;
     }
     .section-eyebrow::before { content: ''; display: block; width: 20px; height: 1.5px; background: var(--terra); }
+    .section-eyebrow.no-bar::before { display: none; }
     .section-title { font-family: 'Lora', serif; font-size: clamp(28px, 3vw, 42px); line-height: 1.2; color: var(--bark); margin-bottom: 20px; }
     .section-title em { font-style: italic; color: var(--terra); }
     .section-body { font-size: 16px; line-height: 1.8; color: var(--bark-lt); font-weight: 300; margin-bottom: 20px; }
