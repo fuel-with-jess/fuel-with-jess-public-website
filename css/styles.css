@@ -199,13 +199,6 @@
     }
     .step h4 { font-size: 16px; font-weight: 600; color: var(--bark); margin-bottom: 4px; }
     .step p { font-size: 14px; color: var(--bark-lt); line-height: 1.6; font-weight: 300; }
-    .journey-quote {
-      background: var(--terra); border-radius: 24px; padding: 44px;
-      position: relative; overflow: hidden;
-    }
-    .journey-quote::before { display: none; }
-    .journey-quote p { font-family: 'Lora', serif; font-size: 21px; font-style: italic; color: var(--cream); line-height: 1.6; position: relative; z-index: 1; margin-bottom: 0; }
-    .journey-quote cite { display: block; font-size: 12px; color: var(--tan); letter-spacing: 0.08em; margin-top: 20px; }
 
     /* ═══════════════════════ ABOUT ═══════════════════════ */
     .about-hero {
