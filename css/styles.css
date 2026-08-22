@@ -148,7 +148,7 @@
     .pillar p { font-size: 13px; color: rgba(236,229,217,0.7); line-height: 1.6; font-weight: 300; }
 
     /* meet jess (homepage) */
-    .meet-section { padding: 88px 48px; max-width: 1200px; margin: 0 auto; }
+    .meet-section { padding: 40px 48px 88px; max-width: 1200px; margin: 0 auto; }
     .meet-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
     .meet-photos { display: flex; align-items: flex-end; justify-content: center; gap: 24px; }
     .meet-photo { width: 100%; max-width: 220px; aspect-ratio: 4/5; object-fit: cover; border-radius: 16px; box-shadow: 0 16px 40px rgba(18,18,10,0.14); }
@@ -156,7 +156,7 @@
     .meet-text .btn-secondary { display: inline-flex; }
 
     /* goals (homepage) */
-    .goals-section { padding: 88px 48px; max-width: 1200px; margin: 0 auto; }
+    .goals-section { padding: 88px 48px 40px; max-width: 1200px; margin: 0 auto; }
 
     /* topics grid */
     .topics-section { padding: 88px 48px; max-width: 1200px; margin: 0 auto; }
