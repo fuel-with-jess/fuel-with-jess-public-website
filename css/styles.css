@@ -148,7 +148,7 @@
     .pillar p { font-size: 13px; color: rgba(236,229,217,0.7); line-height: 1.6; font-weight: 300; }
 
     /* meet jess (homepage) */
-    .meet-section { padding: 40px 48px 88px; max-width: 1200px; margin: 0 auto; }
+    .meet-section { padding: 32px 48px 56px; max-width: 1200px; margin: 0 auto; }
     .meet-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
     .meet-photos { display: flex; align-items: flex-end; justify-content: center; gap: 24px; }
     .meet-photo { width: 100%; max-width: 220px; aspect-ratio: 4/5; object-fit: cover; border-radius: 16px; box-shadow: 0 16px 40px rgba(18,18,10,0.14); }
@@ -156,7 +156,8 @@
     .meet-text .btn-secondary { display: inline-flex; }
 
     /* goals (homepage) */
-    .goals-section { padding: 88px 48px 40px; max-width: 1200px; margin: 0 auto; }
+    .goals-section { padding: 56px 48px 32px; background: var(--sand); }
+    .goals-inner { max-width: 1200px; margin: 0 auto; }
 
     /* topics grid */
     .topics-section { padding: 88px 48px; max-width: 1200px; margin: 0 auto; }
@@ -176,19 +177,25 @@
       position: relative; min-height: 540px; overflow: hidden;
       background-image: url('../images/55%20Banner.jpeg');
       background-size: cover; background-position: center;
+      display: flex;
     }
     .food-strip-overlay {
-      position: absolute; inset: 0;
-      background: linear-gradient(90deg, rgba(41,42,23,0.95) 0%, rgba(41,42,23,0.80) 55%, rgba(41,42,23,0.45) 85%, rgba(41,42,23,0.15) 100%);
+      flex: 1;
+      background: linear-gradient(90deg, rgba(41,42,23,0.94) 0%, rgba(41,42,23,0.9) 100%);
       display: flex; align-items: center;
+      padding: 40px 0;
     }
-    .food-strip-text { padding: 0 80px; max-width: 560px; }
+    .food-strip-text { padding: 0 80px; max-width: 1040px; display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; }
     .food-strip-text h2 { font-family: 'Lora', serif; font-size: 36px; color: var(--white); line-height: 1.25; margin-bottom: 16px; text-shadow: 0 2px 12px rgba(0,0,0,0.55); }
     .food-strip-text h2 em { font-style: italic; color: var(--sage-lt); }
     .food-strip-text p { font-size: 16px; color: rgba(236,229,217,0.96); line-height: 1.7; font-weight: 400; margin-bottom: 24px; text-shadow: 0 1px 8px rgba(0,0,0,0.5); }
+    .food-strip-text .section-eyebrow { color: var(--white); }
+    .food-strip-text .section-eyebrow::before { background: var(--white); }
+    .food-strip-text .step h4 { color: var(--white); }
+    .food-strip-text .step p { color: rgba(236,229,217,0.85); font-size: 14px; margin-bottom: 0; text-shadow: none; }
 
     /* journey section */
-    .journey-section { padding: 88px 48px; background: var(--sand); }
+    .journey-section { padding: 56px 48px; background: var(--sand); }
     .journey-inner { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 72px; align-items: center; }
     .journey-steps { display: flex; flex-direction: column; gap: 24px; }
     .step { display: flex; gap: 18px; align-items: flex-start; }
@@ -211,8 +218,8 @@
 
     .about-body { max-width: 1100px; margin: 0 auto; padding: 80px 48px; display: grid; grid-template-columns: 340px 1fr; gap: 64px; align-items: start; }
     .about-photo { position: static; display: flex; flex-direction: column; align-items: stretch; width: 100%; }
-    .about-photo-frame { width: 100%; aspect-ratio: 900/1599; border-radius: 16px; overflow: hidden; background: var(--sand); }
-    .about-photo-frame img { width: 100%; height: 100%; object-fit: contain; object-position: center top; }
+    .about-photo-frame { width: 100%; aspect-ratio: 7/8; border-radius: 16px; overflow: hidden; background: var(--sand); }
+    .about-photo-frame img { width: 100%; height: 100%; object-fit: cover; object-position: center top; }
     .about-cert-badge {
       margin-top: 20px; background: var(--mist); border: 1px solid rgba(129,128,89,0.3);
       border-radius: 12px; padding: 16px 20px; display: flex; align-items: center; gap: 12px;
@@ -382,7 +389,7 @@
       }
 
       .pillars-inner { grid-template-columns: 1fr 1fr; }
-      .meet-section { padding: 60px 24px; }
+      .meet-section { padding: 40px 24px; }
       .meet-inner { grid-template-columns: 1fr; gap: 32px; text-align: center; }
       .meet-photos { order: -1; }
       .meet-photo { max-width: 160px; }
@@ -390,8 +397,8 @@
       .meet-text .section-eyebrow { justify-content: center; }
       .topics-section { padding: 60px 24px; }
       .topics-grid { grid-template-columns: 1fr 1fr; }
-      .food-strip-text { padding: 0 32px; }
-      .journey-section { padding: 60px 24px; }
+      .food-strip-text { padding: 0 32px; grid-template-columns: 1fr; gap: 32px; }
+      .journey-section { padding: 40px 24px; }
       .journey-inner { grid-template-columns: 1fr; gap: 40px; }
       .about-body { grid-template-columns: 1fr; gap: 40px; padding: 60px 24px; }
       .about-photo { position: static; display: flex; flex-direction: column; align-items: center; width: 100%; }
