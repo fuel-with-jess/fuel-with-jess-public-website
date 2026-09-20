@@ -156,7 +156,8 @@
     .meet-text .btn-secondary { display: inline-flex; }
 
     /* goals (homepage) */
-    .goals-section { padding: 88px 48px 40px; max-width: 1200px; margin: 0 auto; }
+    .goals-section { padding: 88px 48px 40px; background: var(--sand); }
+    .goals-inner { max-width: 1200px; margin: 0 auto; }
 
     /* topics grid */
     .topics-section { padding: 88px 48px; max-width: 1200px; margin: 0 auto; }
