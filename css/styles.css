@@ -286,10 +286,12 @@
     .testimonials-hero h1 em { font-style: italic; opacity: 0.8; }
     .testimonials-hero p { font-size: 17px; color: rgba(236,229,217,0.88); max-width: 520px; margin: 0 auto; line-height: 1.7; font-weight: 300; }
     .testimonials-body { max-width: 1100px; margin: 0 auto; padding: 80px 48px; }
-    .testi-photo-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; margin-bottom: 48px; }
-    .testi-photo-card { border-radius: 20px; overflow: hidden; border: 1px solid var(--sand); }
-    .testi-photo-card:last-child:nth-child(odd) { grid-column: 1 / -1; max-width: calc(50% - 12px); margin: 0 auto; }
-    .testi-photo-card img { display: block; width: 100%; height: auto; }
+    .testi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 48px; }
+    .testi-card { display: flex; flex-direction: column; background: var(--white); border: 1px solid var(--sand); border-radius: 20px; padding: 32px 28px; }
+    .testi-mark { font-family: 'Lora', serif; font-size: 48px; line-height: 1; color: var(--terra); opacity: 0.35; margin-bottom: 4px; }
+    .testi-quote { flex-grow: 1; font-size: 15px; line-height: 1.7; color: var(--bark); font-weight: 300; margin-bottom: 20px; }
+    .testi-author { font-family: 'Lora', serif; font-size: 16px; color: var(--terra); }
+    .testi-author span { display: block; font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase; color: var(--tan); margin-top: 4px; }
 
     /* ═══════════════════════ CONTACT ═══════════════════════ */
     .contact-hero { background: linear-gradient(135deg, var(--terra) 0%, var(--terra-dk) 100%); padding: 80px 48px 40px; text-align: center; }
@@ -407,7 +409,7 @@
       .persona-grid { grid-template-columns: 1fr 1fr; }
       .works-grid { grid-template-columns: 1fr; gap: 40px; }
       .tiptoe-grid { grid-template-columns: 1fr; }
-      .testi-photo-grid { grid-template-columns: 1fr; }
+      .testi-grid { grid-template-columns: 1fr; }
       .contact-body { grid-template-columns: 1fr; gap: 48px; padding: 40px 24px 60px; }
       .footer-top { grid-template-columns: 1fr; gap: 32px; }
       .about-hero, .services-hero, .testimonials-hero, .contact-hero { padding: 60px 24px; }
