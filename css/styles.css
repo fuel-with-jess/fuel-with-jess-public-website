@@ -307,6 +307,18 @@
     .testimonials-hero p { font-size: 17px; color: rgba(236,229,217,0.88); max-width: 520px; margin: 0 auto; line-height: 1.7; font-weight: 300; }
     .testimonials-body { max-width: 1100px; margin: 0 auto; padding: 80px 48px; }
     .testi-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; margin-bottom: 48px; }
+    .testi-grid-3 { grid-template-columns: repeat(3, 1fr); }
+    /* San Diego service pages */
+    .included-card { max-width: 640px; margin: 0 auto 72px; text-align: left; }
+    .included-card .tier-features { margin-bottom: 0; gap: 12px; }
+    .included-card .tier-feature { font-size: 15px; }
+    .included-card:hover { transform: none; box-shadow: none; }
+    .page-cta { background: var(--bark); border-radius: 20px; padding: 48px 32px; text-align: center; }
+    .page-cta h2 { font-family: 'Lora', serif; font-size: 28px; color: var(--cream); margin-bottom: 12px; }
+    .page-cta p { font-size: 15px; color: var(--tan); line-height: 1.7; font-weight: 300; max-width: 500px; margin: 0 auto 24px; }
+    .home-services-grid { max-width: 1000px; margin: 0 auto; }
+    .home-services-grid .tier-card { text-align: left; }
+    .home-services-grid .tier-cta { margin-top: auto; }
     .testi-card { display: flex; flex-direction: column; background: var(--white); border: 1px solid var(--sand); border-radius: 20px; padding: 20px 20px 32px; }
     .testi-photo { position: relative; aspect-ratio: 3 / 4; overflow: hidden; border-radius: 14px; margin-bottom: 20px; }
     .testi-photo img { display: block; width: 100%; height: 100%; object-fit: cover; filter: saturate(0.82) brightness(1.04); }
@@ -396,11 +408,22 @@
     .hero-text-col { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 0; }
 
     /* ── RESPONSIVE ── */
-    @media (max-width: 900px) {
-      nav { padding: 0 24px; }
+    /* The menu has 8 links, so switch to the hamburger menu below 1200px
+       and tighten spacing just above that so labels never wrap. */
+    .nav-links { align-items: center; }
+    .nav-links a { white-space: nowrap; }
+    @media (max-width: 1360px) {
+      .nav-links { gap: 22px; }
+      .nav-links a { font-size: 12px; letter-spacing: 0.06em; }
+    }
+    @media (max-width: 1200px) {
       .nav-links { display: none; }
       .hamburger { display: flex; }
+      .nav-links.open { align-items: flex-start; }
       .nav-links.open { display: flex; flex-direction: column; position: absolute; top: 72px; left: 0; right: 0; background: var(--cream); padding: 20px 24px; gap: 20px; border-bottom: 1px solid var(--sand); box-shadow: 0 8px 24px rgba(18,18,10,0.1); }
+    }
+    @media (max-width: 900px) {
+      nav { padding: 0 24px; }
       .hero-inner { padding: 60px 24px; }
       .hero-split { grid-template-columns: 1fr; gap: 20px; }
       .hero-logo-col { padding-right: 0; border-right: none; justify-content: center; }
@@ -434,7 +457,7 @@
       .persona-grid { grid-template-columns: 1fr 1fr; }
       .works-grid { grid-template-columns: 1fr; gap: 40px; }
       .tiptoe-grid { grid-template-columns: 1fr; }
-      .testi-grid { grid-template-columns: 1fr; }
+      .testi-grid, .testi-grid-3 { grid-template-columns: 1fr; }
       .contact-body { grid-template-columns: 1fr; gap: 48px; padding: 40px 24px 60px; }
       .footer-top { grid-template-columns: 1fr; gap: 32px; }
       .about-hero, .services-hero, .testimonials-hero, .contact-hero { padding: 60px 24px; }
