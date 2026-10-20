@@ -685,7 +685,8 @@
     .post-table thead th { background: var(--bark); color: var(--cream); font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; font-weight: 600; }
     .post-table tbody th { font-weight: 600; }
     .post-table tbody tr:last-child th, .post-table tbody tr:last-child td { border-bottom: none; }
-    .guide-signup { background: var(--bark); color: var(--cream); border-radius: 20px; padding: 40px 32px; margin: 56px 0 40px; text-align: center; }
+    /* scroll-margin keeps the box clear of the fixed 72px nav when a link jumps to #starter-guide */
+    .guide-signup { scroll-margin-top: 96px; background: var(--bark); color: var(--cream); border-radius: 20px; padding: 40px 32px; margin: 56px 0 40px; text-align: center; }
     .guide-signup .post-eyebrow { color: var(--sage-lt); }
     .guide-signup h2 { font-family: 'Lora', serif; font-size: 28px; line-height: 1.25; color: var(--cream); margin-bottom: 12px; }
     .guide-signup h2 em { color: var(--sage-lt); }
