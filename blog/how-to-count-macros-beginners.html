@@ -193,13 +193,17 @@
     <section class="guide-signup" id="starter-guide" aria-labelledby="guide-title">
       <p class="post-eyebrow">Free guide</p>
       <h2 id="guide-title">Get the free <em>Counting Macros Starter Guide</em></h2>
-      <p>A worksheet to calculate your numbers, go-to food lists and a sample day of eating, all in one printable guide. Enter your email and I'll send it to you.</p>
+      <p>A worksheet to calculate your numbers, go-to food lists and a sample day of eating, all in one printable guide. Enter your email to download it free.</p>
       <form class="guide-form" novalidate>
         <input type="email" name="email" placeholder="Your email" autocomplete="email" required aria-label="Email address" />
-        <button type="submit" class="btn-primary">Send me the guide</button>
+        <button type="submit" class="btn-primary">Get the guide</button>
         <p class="guide-error" role="alert"></p>
       </form>
-      <p class="guide-success" hidden role="status"><strong>Thanks, you're on the list!</strong> I'll email you the Starter Guide soon.</p>
+      <div class="guide-success" hidden role="status">
+        <p><strong>You're on the list!</strong> Your Starter Guide is ready.</p>
+        <!-- js/guide-signup.js adds the download button here after a successful sign-up -->
+        <p class="guide-download"></p>
+      </div>
       <p class="guide-fine-print">No spam. Unsubscribe anytime.</p>
     </section>
 

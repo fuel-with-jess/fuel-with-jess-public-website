@@ -24,11 +24,12 @@ blog/*.html           Blog posts (e.g. blog/how-to-count-macros-beginners.html â
 css/styles.css        All styling. Color palette is at the top in :root.
 js/nav.js             Hamburger menu, nav shadow on scroll, active-link highlight.
 js/forms.js           Pill/scale UI, plus apply + intake form submission.
-js/guide-signup.js    Counting Macros Starter Guide sign-up box on blog posts (sends to Formspree).
+js/guide-signup.js    Counting Macros Starter Guide sign-up box on blog posts (sends to Formspree, then shows the download button).
+downloads/            Free downloads (the Starter Guide PDF). Hidden from Google via netlify.toml. To update the guide, replace the PDF and keep the same file name.
 images/               All site images: logo.png, jess-photo.jpg, nasm-badge.png, home-image.png.
 robots.txt            Tells search engines they can crawl the site; points to the sitemap.
 sitemap.xml           List of public pages for search engines. Add new public pages here.
-netlify.toml          Netlify settings (image caching for 7 days).
+netlify.toml          Netlify settings (image caching for 7 days, keep downloads/ out of Google).
 ```
 
 ## How to edit common things
