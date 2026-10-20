@@ -12,3 +12,12 @@
   for = "/downloads/*"
   [headers.values]
     X-Robots-Tag = "noindex"
+
+# Short, easy-to-type link for social posts: fuelwithjess.com/macros
+# jumps straight to the Starter Guide sign-up box on the macros blog post.
+# 302 (temporary) so the destination can be changed later without browsers
+# remembering the old one.
+[[redirects]]
+  from = "/macros"
+  to = "/blog/how-to-count-macros-beginners#starter-guide"
+  status = 302

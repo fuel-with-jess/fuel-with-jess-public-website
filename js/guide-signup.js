@@ -49,3 +49,15 @@ document.querySelectorAll('.guide-form').forEach(function (form) {
     });
   });
 });
+
+// Links like fuelwithjess.com/macros land on #starter-guide. Some phone
+// browsers skip that jump on long pages, so make sure it happens once the
+// page has finished loading (only if we're not already there).
+window.addEventListener('load', function () {
+  if (window.location.hash !== '#starter-guide') return;
+  const box = document.getElementById('starter-guide');
+  if (!box) return;
+  const top = box.getBoundingClientRect().top;
+  if (top > 0 && top < 150) return;
+  window.scrollTo({ top: top + window.scrollY - 96, behavior: 'instant' });
+});
