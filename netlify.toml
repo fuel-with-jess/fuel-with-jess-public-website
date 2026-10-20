@@ -5,3 +5,10 @@
   for = "/images/*"
   [headers.values]
     Cache-Control = "public, max-age=604800"
+
+# The Starter Guide is a free download behind the blog sign-up form.
+# Keep the PDF itself out of Google so people find it through the form.
+[[headers]]
+  for = "/downloads/*"
+  [headers.values]
+    X-Robots-Tag = "noindex"
