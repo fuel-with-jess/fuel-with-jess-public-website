@@ -12,6 +12,8 @@ the files in this folder as-is.
 index.html            Home
 about.html            About Jess
 services.html         Coaching packages
+nutrition-coaching-san-diego.html            San Diego coaching landing page (served at /nutrition-coaching-san-diego)
+corporate-wellness-workshops-san-diego.html  Corporate workshops landing page (served at /corporate-wellness-workshops-san-diego)
 testimonials.html     Client testimonials
 contact.html          Ways to connect + next-step CTAs
 apply.html            New client application form (5 questions, ~3-5 min)
@@ -31,7 +33,7 @@ netlify.toml          Netlify settings (image caching for 7 days).
 - **Copy/text changes:** edit the relevant page's HTML directly.
 - **Color or font tweaks:** edit the `:root` variables at the top of `css/styles.css`.
 - **Add a new page:** copy an existing page (e.g. `about.html`), swap the content between `<main>` and `</main>`, update the `<title>` and `<meta name="description">`, then add a `<li><a href="newpage.html">…</a></li>` entry to the nav and footer of *every* page.
-- **Change the form recipient or booking link:** see the constants at the top of `js/forms.js` (`FORMSPREE_ENDPOINT`, `BOOKING_URL`).
+- **Change the form recipient or booking link:** see the constants at the top of `js/forms.js` (`FORMSPREE_ENDPOINT`, `BOOKING_URL`). The booking link is also hard-coded in the buttons and JSON-LD of the two San Diego pages and the home page JSON-LD; search for `calendar.app.google`.
 
 ## Things that are duplicated across pages
 
@@ -40,7 +42,7 @@ the trade-off for having no build step. **When changing one, change all of them
 to match** — search for "SHARED NAV" and "SHARED FOOTER" comments to find them.
 
 Some facts also live in the **STRUCTURED DATA (JSON-LD)** block in the `<head>`
-of index, about, services and testimonials (prices, FAQ answers, testimonial
+of index, about, services, testimonials and the two San Diego pages (prices, FAQ answers, testimonial
 quotes, Jess's links). When you change prices, the FAQ or a testimonial, update
 that block on the same page too.
 
