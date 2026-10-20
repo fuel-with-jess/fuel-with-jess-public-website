@@ -21,7 +21,7 @@ const POPUP_SEEN_KEY = 'fwj-popup-seen';
   overlay.innerHTML = `
     <div class="popup" role="dialog" aria-modal="true" aria-labelledby="popup-title">
       <button type="button" class="popup-close" aria-label="Close">&times;</button>
-      <div class="popup-img"><img src="images/jess-home-mug.jpg" alt="Jess holding a Fuel with Jess mug" /></div>
+      <div class="popup-img"><img src="images/jess-home-mug.jpg" alt="Jess Pierce holding her Fuel with Jess mug in the kitchen" /></div>
       <div class="popup-body">
         <div class="popup-form-view">
           <p class="popup-eyebrow">Stay Connected</p>

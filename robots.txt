@@ -1,3 +1,24 @@
+# Search engines and AI search tools are welcome to crawl the whole site.
+
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+# ChatGPT search
+User-agent: OAI-SearchBot
+Allow: /
+
+# Perplexity
+User-agent: PerplexityBot
+Allow: /
+
+# Claude search
+User-agent: Claude-SearchBot
+Allow: /
+
+# Everyone else
 User-agent: *
 Allow: /
 
