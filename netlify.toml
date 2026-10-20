@@ -1,0 +1,7 @@
+# Let browsers cache images for a week so repeat visits load faster.
+# If you replace an image but keep the same file name, visitors may see
+# the old one for up to 7 days. Give the new image a new name to avoid that.
+[[headers]]
+  for = "/images/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"

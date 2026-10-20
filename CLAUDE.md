@@ -12,7 +12,7 @@ the files in this folder as-is.
 index.html            Home
 about.html            About Jess
 services.html         Coaching packages
-testimonials.html     Client testimonials (currently hidden from nav)
+testimonials.html     Client testimonials
 contact.html          Ways to connect + next-step CTAs
 apply.html            New client application form (5 questions, ~3-5 min)
 intake.html           New client intake form (20+ questions, ~10-15 min)
@@ -21,6 +21,9 @@ css/styles.css        All styling. Color palette is at the top in :root.
 js/nav.js             Hamburger menu, nav shadow on scroll, active-link highlight.
 js/forms.js           Pill/scale UI, plus apply + intake form submission.
 images/               All site images: logo.png, jess-photo.jpg, nasm-badge.png, home-image.png.
+robots.txt            Tells search engines they can crawl the site; points to the sitemap.
+sitemap.xml           List of public pages for search engines. Add new public pages here.
+netlify.toml          Netlify settings (image caching for 7 days).
 ```
 
 ## How to edit common things
@@ -35,6 +38,11 @@ images/               All site images: logo.png, jess-photo.jpg, nasm-badge.png,
 The `<nav>` and `<footer>` blocks are copy-pasted into every HTML file. This is
 the trade-off for having no build step. **When changing one, change all of them
 to match** — search for "SHARED NAV" and "SHARED FOOTER" comments to find them.
+
+Some facts also live in the **STRUCTURED DATA (JSON-LD)** block in the `<head>`
+of index, about, services and testimonials (prices, FAQ answers, testimonial
+quotes, Jess's links). When you change prices, the FAQ or a testimonial, update
+that block on the same page too.
 
 ## Workflow rule — always open a PR
 
