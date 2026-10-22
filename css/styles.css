@@ -632,7 +632,7 @@
     .links-item--primary:hover { background: var(--terra-dk); border-color: var(--terra-dk); }
     .links-copy { margin-top: 36px; font-size: 12px; color: var(--bark-lt); font-weight: 300; }
 
-    /* ── NEWSLETTER POPUP (js/popup.js) ── */
+    /* ── STARTER GUIDE POPUP (js/popup.js) ── */
     .popup-overlay { position: fixed; inset: 0; z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 20px; background: rgba(18,18,10,0.55); opacity: 0; transition: opacity 0.3s ease; }
     .popup-overlay.open { opacity: 1; }
     .popup { position: relative; display: grid; grid-template-columns: 1fr 1fr; width: 100%; max-width: 820px; background: var(--cream); border-radius: 20px; overflow: hidden; box-shadow: 0 24px 80px rgba(18,18,10,0.3); transform: translateY(16px); transition: transform 0.3s ease; }
@@ -650,13 +650,14 @@
     .popup-form input:focus { outline: none; border-color: var(--terra); box-shadow: 0 0 0 3px rgba(93,92,56,0.2); }
     .popup-submit { width: 100%; padding: 16px; border: none; border-radius: 50px; background: var(--terra); color: var(--white); font-family: inherit; font-size: 16px; font-weight: 700; cursor: pointer; transition: background 0.2s; }
     .popup-submit:hover { background: var(--terra-dk); }
+    a.popup-submit { display: block; text-align: center; text-decoration: none; }
     .popup-submit:disabled { opacity: 0.7; cursor: default; }
     .popup-error { min-height: 18px; margin-top: 8px; font-size: 13px; color: #c0392b; text-align: center; }
     .popup-decline { display: block; margin: 4px auto 0; background: none; border: none; font-family: 'Lora', serif; font-size: 15px; color: var(--bark-lt); cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
     @media (max-width: 700px) {
       .popup { grid-template-columns: 1fr; max-width: 420px; max-height: calc(100vh - 40px); overflow-y: auto; }
-      .popup-img { height: 200px; }
-      .popup-img img { object-position: center 25%; }
+      .popup-img { height: 220px; }
+      .popup-img img { object-position: center 20%; }
       .popup-body { padding: 32px 24px 28px; }
       .popup h2 { font-size: 30px; }
       .popup-close { background: var(--cream); }

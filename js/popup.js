@@ -1,10 +1,12 @@
-// ── Newsletter popup ──
-// Shows once to first-time visitors after a short delay. Once someone closes
-// it or subscribes, it won't show again on that browser.
-// Signups go to the same Formspree inbox as the apply/intake forms.
+// ── Starter Guide popup ──
+// Offers the free Counting Macros Starter Guide to first-time visitors after a
+// short delay. Once someone closes it or signs up, it won't show again on that
+// browser. Signups go to the same Formspree inbox as the apply/intake forms,
+// then a download button for the guide appears (same PDF as the blog sign-up).
 const POPUP_FORMSPREE_ENDPOINT = 'https://formspree.io/f/xqewwlpb';
+const POPUP_PDF_URL = '/downloads/counting-macros-starter-guide.pdf';
 const POPUP_DELAY_MS = 5000;
-const POPUP_SEEN_KEY = 'fwj-popup-seen';
+const POPUP_SEEN_KEY = 'fwj-popup-guide-seen';
 
 (function () {
   function hasSeen() {
@@ -21,23 +23,24 @@ const POPUP_SEEN_KEY = 'fwj-popup-seen';
   overlay.innerHTML = `
     <div class="popup" role="dialog" aria-modal="true" aria-labelledby="popup-title">
       <button type="button" class="popup-close" aria-label="Close">&times;</button>
-      <div class="popup-img"><img src="images/jess-home-mug.jpg" alt="Jess Pierce holding her Fuel with Jess mug in the kitchen" /></div>
+      <div class="popup-img"><img src="/images/jess-macro-bowl.jpg" alt="Jess Pierce smiling in her kitchen with a high-protein chicken and veggie bowl" /></div>
       <div class="popup-body">
         <div class="popup-form-view">
-          <p class="popup-eyebrow">Stay Connected</p>
-          <h2 id="popup-title">Fuel for your <em>inbox.</em></h2>
-          <p class="popup-desc">Simple nutrition tips, easy high-protein recipes, and the occasional coaching spot opening. No spam, ever.</p>
+          <p class="popup-eyebrow">Free Starter Guide</p>
+          <h2 id="popup-title">Counting macros, <em>made simple.</em></h2>
+          <p class="popup-desc">Find your starting numbers in about 15 minutes, without cutting out the foods you love. Get my free guide with a macro worksheet, go-to food lists and a sample day of eating.</p>
           <form class="popup-form" novalidate>
             <input type="email" name="email" placeholder="Email" autocomplete="email" required aria-label="Email address" />
-            <button type="submit" class="popup-submit">Join the list</button>
+            <button type="submit" class="popup-submit">Send me the guide</button>
             <p class="popup-error" role="alert"></p>
           </form>
           <button type="button" class="popup-decline">No, thanks</button>
         </div>
-        <div class="popup-success-view" hidden>
-          <p class="popup-eyebrow">Subscribed</p>
-          <h2>You're on the <em>list.</em></h2>
-          <p class="popup-desc">Thanks for joining! My next note will land right in your inbox.</p>
+        <div class="popup-success-view" hidden role="status">
+          <p class="popup-eyebrow">You're in</p>
+          <h2>Your guide is <em>ready.</em></h2>
+          <p class="popup-desc">Thanks for joining! Download your Counting Macros Starter Guide below. I'll also send you simple nutrition tips now and then.</p>
+          <p class="popup-download"></p>
         </div>
       </div>
     </div>`;
@@ -74,19 +77,32 @@ const POPUP_SEEN_KEY = 'fwj-popup-seen';
     }
     errorEl.textContent = '';
     submitBtn.disabled = true;
-    submitBtn.textContent = 'Joining…';
+    submitBtn.textContent = 'Sending…';
     fetch(POPUP_FORMSPREE_ENDPOINT, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-      body: JSON.stringify({ _subject: 'New email list signup', 'Form': 'Newsletter popup', email: email })
+      body: JSON.stringify({
+        _subject: 'New Starter Guide sign-up (Counting Macros)',
+        'Form': 'Popup: Counting Macros Starter Guide',
+        'Page': window.location.pathname,
+        email: email
+      })
     }).then(res => {
       if (!res.ok) throw new Error();
+      // Added only after sign-up so the PDF link isn't in the page for crawlers.
+      const link = document.createElement('a');
+      link.href = POPUP_PDF_URL;
+      link.className = 'popup-submit';
+      link.setAttribute('download', 'Fuel-with-Jess-Counting-Macros-Starter-Guide.pdf');
+      link.textContent = 'Download the guide (PDF)';
+      overlay.querySelector('.popup-download').appendChild(link);
       overlay.querySelector('.popup-form-view').hidden = true;
       overlay.querySelector('.popup-success-view').hidden = false;
+      link.focus();
     }).catch(() => {
       errorEl.textContent = 'Something went wrong — please try again.';
       submitBtn.disabled = false;
-      submitBtn.textContent = 'Join the list';
+      submitBtn.textContent = 'Send me the guide';
     });
   });
 
