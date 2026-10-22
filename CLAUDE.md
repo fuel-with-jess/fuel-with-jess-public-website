@@ -24,7 +24,8 @@ blog/*.html           Blog posts (e.g. blog/how-to-count-macros-beginners.html â
 css/styles.css        All styling. Color palette is at the top in :root.
 js/nav.js             Hamburger menu, nav shadow on scroll, active-link highlight.
 js/forms.js           Pill/scale UI, plus apply + intake form submission.
-js/guide-signup.js    Counting Macros Starter Guide sign-up box on blog posts (sends to Formspree, then shows the download button).
+js/guide-signup.js    Counting Macros Starter Guide sign-up box on blog posts (sends to Kit, then shows the download button).
+js/popup.js           Starter Guide popup for first-time visitors (sends to Kit, then shows the download button).
 downloads/            Free downloads (the Starter Guide PDF). Hidden from Google via netlify.toml. To update the guide, replace the PDF and keep the same file name.
 images/               All site images: logo.png, jess-photo.jpg, nasm-badge.png, home-image.png.
 robots.txt            Tells search engines they can crawl the site; points to the sitemap.
@@ -37,6 +38,7 @@ netlify.toml          Netlify settings (image caching for 7 days, keep downloads
 - **Copy/text changes:** edit the relevant page's HTML directly.
 - **Color or font tweaks:** edit the `:root` variables at the top of `css/styles.css`.
 - **Add a new page:** copy an existing page (e.g. `about.html`), swap the content between `<main>` and `</main>`, update the `<title>` and `<meta name="description">`, then add a `<li><a href="newpage.html">â€¦</a></li>` entry to the nav and footer of *every* page.
+- **Email list (Kit):** the popup and blog guide sign-up both send to Kit form `10083869` (`app.kit.com/forms/10083869/subscriptions`, constants at the top of `js/popup.js` and `js/guide-signup.js`). The confirmation email and its wording are set in Kit, not here.
 - **Change the form recipient or booking link:** see the constants at the top of `js/forms.js` (`FORMSPREE_ENDPOINT`, `BOOKING_URL`). The booking link is also hard-coded in the buttons and JSON-LD of the two San Diego pages and the home page JSON-LD; search for `calendar.app.google`.
 
 - **Add a blog post:** copy an existing file in `blog/`, swap the `<article>` content, update the `<title>`, description, canonical URL and the JSON-LD block, then add a card for it to `blog/index.html` (and its `blogPost` entry in that page's JSON-LD) and a line to `sitemap.xml`. Pages in `blog/` use root paths (`/css/styles.css`, `/about.html`) because they live in a subfolder.
