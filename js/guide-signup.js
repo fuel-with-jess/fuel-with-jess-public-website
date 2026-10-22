@@ -1,8 +1,8 @@
 // ── Counting Macros Starter Guide sign-up (blog posts) ──
-// Sends the email address to the same Formspree inbox as the popup and forms,
-// then shows a download button for the guide. The PDF link is added only after
+// Sends the email address to Jess's Kit form (same one as the popup), then
+// shows a download button for the guide. The PDF link is added only after
 // a successful sign-up, so it isn't in the page's HTML for crawlers to find.
-const GUIDE_FORMSPREE_ENDPOINT = 'https://formspree.io/f/xqewwlpb';
+const GUIDE_KIT_ENDPOINT = 'https://app.kit.com/forms/10083869/subscriptions';
 const GUIDE_PDF_URL = '/downloads/counting-macros-starter-guide.pdf';
 
 document.querySelectorAll('.guide-form').forEach(function (form) {
@@ -22,17 +22,12 @@ document.querySelectorAll('.guide-form').forEach(function (form) {
     errorEl.textContent = '';
     submitBtn.disabled = true;
     submitBtn.textContent = 'Sending…';
-    fetch(GUIDE_FORMSPREE_ENDPOINT, {
+    fetch(GUIDE_KIT_ENDPOINT, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-      body: JSON.stringify({
-        _subject: 'New Starter Guide sign-up (Counting Macros)',
-        'Form': 'Blog: Counting Macros Starter Guide',
-        'Page': window.location.pathname,
-        email: email
-      })
-    }).then(function (res) {
-      if (!res.ok) throw new Error();
+      headers: { 'Accept': 'application/json' },
+      body: new URLSearchParams({ email_address: email, referrer: window.location.href })
+    }).then(function (res) { return res.json(); }).then(function (data) {
+      if (data.status === 'failed') throw new Error();
       const link = document.createElement('a');
       link.href = GUIDE_PDF_URL;
       link.className = 'btn-primary';
