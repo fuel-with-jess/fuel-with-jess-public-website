@@ -23,7 +23,7 @@ const POPUP_SEEN_KEY = 'fwj-popup-guide-seen';
   overlay.innerHTML = `
     <div class="popup" role="dialog" aria-modal="true" aria-labelledby="popup-title">
       <button type="button" class="popup-close" aria-label="Close">&times;</button>
-      <div class="popup-img"><img src="/images/jess-macro-bowl.jpg" alt="Jess Pierce smiling in her kitchen with a high-protein chicken and veggie bowl" /></div>
+      <div class="popup-img"><img src="/images/jess-gym-arms-crossed.jpg" alt="Jess Pierce smiling with her arms crossed in the gym" /></div>
       <div class="popup-body">
         <div class="popup-form-view">
           <p class="popup-eyebrow">Free Starter Guide</p>
