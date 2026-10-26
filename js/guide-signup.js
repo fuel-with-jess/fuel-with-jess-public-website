@@ -1,9 +1,8 @@
 // ── Counting Macros Starter Guide sign-up (blog posts) ──
 // Sends the email address to Jess's Kit form (same one as the popup), then
-// shows a download button for the guide. The PDF link is added only after
-// a successful sign-up, so it isn't in the page's HTML for crawlers to find.
+// shows a "check your email" message. There's no download here: Kit's
+// confirmation email delivers the guide once they confirm.
 const GUIDE_KIT_ENDPOINT = 'https://app.kit.com/forms/10083869/subscriptions';
-const GUIDE_PDF_URL = '/downloads/counting-macros-starter-guide.pdf';
 
 document.querySelectorAll('.guide-form').forEach(function (form) {
   const box = form.closest('.guide-signup');
@@ -28,15 +27,8 @@ document.querySelectorAll('.guide-form').forEach(function (form) {
       body: new URLSearchParams({ email_address: email, referrer: window.location.href })
     }).then(function (res) { return res.json(); }).then(function (data) {
       if (data.status === 'failed') throw new Error();
-      const link = document.createElement('a');
-      link.href = GUIDE_PDF_URL;
-      link.className = 'btn-primary';
-      link.setAttribute('download', 'Fuel-with-Jess-Counting-Macros-Starter-Guide.pdf');
-      link.textContent = 'Download the Starter Guide (PDF) →';
-      box.querySelector('.guide-download').appendChild(link);
       form.hidden = true;
       box.querySelector('.guide-success').hidden = false;
-      link.focus();
     }).catch(function () {
       errorEl.textContent = 'Something went wrong. Please try again.';
       submitBtn.disabled = false;
