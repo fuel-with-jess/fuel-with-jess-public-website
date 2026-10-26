@@ -37,7 +37,7 @@ const POPUP_SEEN_KEY = 'fwj-popup-guide-seen';
         </div>
         <div class="popup-success-view" hidden role="status">
           <p class="popup-eyebrow">You're in</p>
-          <h2>Your guide is <em>ready.</em></h2>
+          <h2>Almost <em>there.</em></h2>
           <p class="popup-desc">Check your email to confirm and get your guide.</p>
         </div>
       </div>

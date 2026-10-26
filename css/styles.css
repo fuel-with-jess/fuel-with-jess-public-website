@@ -698,7 +698,7 @@
     .guide-error { flex-basis: 100%; font-size: 13px; color: #F2B8A2; min-height: 1em; margin: 0; }
     .guide-signup .guide-success { color: var(--cream); font-size: 16px; }
     .guide-signup .guide-success p { margin: 0 auto 16px; }
-    .guide-signup .guide-download { margin-bottom: 0; }
+    .guide-signup .guide-success p:last-child { margin-bottom: 0; }
     .guide-signup .guide-fine-print { font-size: 12px; margin: 12px auto 0; opacity: 0.8; }
     .author-bio { display: flex; gap: 20px; align-items: flex-start; background: var(--white); border: 1px solid var(--sand); border-radius: 16px; padding: 24px; margin-bottom: 32px; }
     .author-bio img { width: 96px; height: 96px; border-radius: 50%; object-fit: cover; flex-shrink: 0; }
