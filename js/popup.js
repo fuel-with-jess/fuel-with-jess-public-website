@@ -1,10 +1,9 @@
 // ── Starter Guide popup ──
 // Offers the free Counting Macros Starter Guide to first-time visitors after a
 // short delay. Once someone closes it or signs up, it won't show again on that
-// browser. Signups go to Jess's Kit form (same one as the blog sign-up), then a
-// download button for the guide appears. Kit sends its own confirmation email.
+// browser. Signups go to Jess's Kit form (same one as the blog sign-up). There's
+// no download here: Kit's confirmation email delivers the guide once they confirm.
 const POPUP_KIT_ENDPOINT = 'https://app.kit.com/forms/10083869/subscriptions';
-const POPUP_PDF_URL = '/downloads/counting-macros-starter-guide.pdf';
 const POPUP_DELAY_MS = 5000;
 const POPUP_SEEN_KEY = 'fwj-popup-guide-seen';
 
@@ -39,8 +38,7 @@ const POPUP_SEEN_KEY = 'fwj-popup-guide-seen';
         <div class="popup-success-view" hidden role="status">
           <p class="popup-eyebrow">You're in</p>
           <h2>Your guide is <em>ready.</em></h2>
-          <p class="popup-desc">Download your Counting Macros Starter Guide below. Then check your inbox and confirm your email so you don't miss my simple nutrition tips.</p>
-          <p class="popup-download"></p>
+          <p class="popup-desc">Check your email to confirm and get your guide.</p>
         </div>
       </div>
     </div>`;
@@ -84,16 +82,9 @@ const POPUP_SEEN_KEY = 'fwj-popup-guide-seen';
       body: new URLSearchParams({ email_address: email, referrer: window.location.href })
     }).then(res => res.json()).then(data => {
       if (data.status === 'failed') throw new Error();
-      // Added only after sign-up so the PDF link isn't in the page for crawlers.
-      const link = document.createElement('a');
-      link.href = POPUP_PDF_URL;
-      link.className = 'popup-submit';
-      link.setAttribute('download', 'Fuel-with-Jess-Counting-Macros-Starter-Guide.pdf');
-      link.textContent = 'Download the guide (PDF)';
-      overlay.querySelector('.popup-download').appendChild(link);
       overlay.querySelector('.popup-form-view').hidden = true;
       overlay.querySelector('.popup-success-view').hidden = false;
-      link.focus();
+      overlay.querySelector('.popup-close').focus();
     }).catch(() => {
       errorEl.textContent = 'Something went wrong — please try again.';
       submitBtn.disabled = false;
