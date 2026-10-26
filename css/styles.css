@@ -650,7 +650,6 @@
     .popup-form input:focus { outline: none; border-color: var(--terra); box-shadow: 0 0 0 3px rgba(93,92,56,0.2); }
     .popup-submit { width: 100%; padding: 16px; border: none; border-radius: 50px; background: var(--terra); color: var(--white); font-family: inherit; font-size: 16px; font-weight: 700; cursor: pointer; transition: background 0.2s; }
     .popup-submit:hover { background: var(--terra-dk); }
-    a.popup-submit { display: block; text-align: center; text-decoration: none; }
     .popup-submit:disabled { opacity: 0.7; cursor: default; }
     .popup-error { min-height: 18px; margin-top: 8px; font-size: 13px; color: #c0392b; text-align: center; }
     .popup-decline { display: block; margin: 4px auto 0; background: none; border: none; font-family: 'Lora', serif; font-size: 15px; color: var(--bark-lt); cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
