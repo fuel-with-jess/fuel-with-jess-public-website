@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Client Resources | Fuel with Jess</title>
+  <meta name="description" content="Guides and resources for Fuel with Jess coaching clients." />
+  <!-- Private page: only shown after the client password (see netlify/edge-functions/client-gate.js). Kept out of search engines. -->
+  <meta name="robots" content="noindex" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Allura&family=Lora:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body>
+
+<!-- SHARED NAV -->
+<nav id="main-nav">
+  <a class="nav-logo" href="/"><img src="/images/Fuel-Logo-Full-Color.png" alt="Fuel with Jess logo, go to home page" style="height:52px;width:auto;" /></a>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="/">Home</a></li>
+    <li><a href="/about.html">About Me</a></li>
+    <li><a href="/services.html">Find Your Fit</a></li>
+    <li><a href="/nutrition-coaching-san-diego">San Diego Coaching</a></li>
+    <li><a href="/corporate-wellness-workshops-san-diego">Workshops</a></li>
+    <li><a href="/testimonials.html">Testimonials</a></li>
+    <li><a href="/contact.html">Contact</a></li>
+    <li><a href="/apply.html" class="nav-cta">Get Started</a></li>
+  </ul>
+  <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<main>
+  <section class="contact-hero">
+    <p style="font-size:11px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:rgba(253,250,245,0.6);margin-bottom:12px;">Clients only</p>
+    <h1>Client <em>Resources</em></h1>
+    <p>Everything you need between check-ins. Tap a guide to open it, or save it to your phone.</p>
+  </section>
+
+  <!-- To add a guide: put the PDF in clients/files/ and copy one of the <a class="contact-option"> blocks below. -->
+  <div class="client-resources">
+    <div class="contact-options">
+      <a href="/clients/files/macro-guide.pdf" target="_blank" class="contact-option">
+        <div class="co-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21.21 15.89A10 10 0 118 2.83"/><path d="M22 12A10 10 0 0012 2v10z"/></svg></div>
+        <div class="co-text"><h4>Macro Guide</h4><p>How to hit your protein, carb and fat targets day to day</p></div>
+      </a>
+      <a href="/clients/files/meal-guide.pdf" target="_blank" class="contact-option">
+        <div class="co-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 002-2V2"/><path d="M7 2v20"/><path d="M21 15V2a5 5 0 00-5 5v6c0 1.1.9 2 2 2h3zm0 0v7"/></svg></div>
+        <div class="co-text"><h4>Meal Guides</h4><p>Meal ideas and templates built around your macros</p></div>
+      </a>
+      <a href="/clients/files/fitness-tracker-recommendations.pdf" target="_blank" class="contact-option">
+        <div class="co-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+        <div class="co-text"><h4>Fitness Tracker Recommendations</h4><p>The trackers and apps I recommend, and how to set them up</p></div>
+      </a>
+    </div>
+    <p class="client-resources-note">Questions about a guide? <a href="mailto:fuelwithjess@gmail.com">Email Jess</a> · <a href="/clients/logout">Log out</a></p>
+  </div>
+</main>
+
+<!-- SHARED FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <img src="/images/logo-light.png" alt="Fuel with Jess logo" style="height:72px;width:auto;margin-bottom:16px;" />
+        <h3 style="display:none;">Fuel with Jess</h3>
+        <p>NASM Certified nutrition coaching for people who want to understand their bodies, build lasting habits, and actually enjoy the process.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Navigate</h4>
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/about.html">About Jess</a></li>
+          <li><a href="/services.html">Find Your Fit</a></li>
+          <li><a href="/nutrition-coaching-san-diego">San Diego Coaching</a></li>
+          <li><a href="/corporate-wellness-workshops-san-diego">Workshops</a></li>
+          <li><a href="/testimonials.html">Testimonials</a></li>
+          <li><a href="/blog/">Blog</a></li>
+          <li><a href="/contact.html">Contact</a></li>
+    <li><a href="/legal.html">Legal</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Get Started</h4>
+        <ul>
+          <li><a href="/apply.html">Book a Discovery Call</a></li>
+          <li><a href="mailto:fuelwithjess@gmail.com">Email Jess</a></li>
+          <li><a href="/clients/">Client Login</a></li>
+          <li><a href="https://instagram.com/fuel_with_jess" target="_blank">@fuel_with_jess</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p class="footer-copy">© 2026 Fuel with Jess · All rights reserved</p>
+      <div class="footer-socials">
+        <a href="https://instagram.com/fuel_with_jess" target="_blank" style="display:flex;align-items:center;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0;"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg></a>
+        <a href="mailto:fuelwithjess@gmail.com" style="display:flex;align-items:center;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0;"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+  <script src="/js/nav.js"></script>
+</body>
+</html>
