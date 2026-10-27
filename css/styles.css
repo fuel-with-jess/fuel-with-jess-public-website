@@ -719,3 +719,20 @@
       .author-bio { flex-direction: column; }
       .guide-signup { padding: 32px 20px; }
     }
+
+    /* ── CLIENT RESOURCES (password-protected, /clients/) ── */
+    .client-login { min-height: 100vh; padding: 48px 16px; display: flex; align-items: center; justify-content: center; }
+    .client-login-card { width: 100%; max-width: 420px; background: var(--mist); border: 1px solid var(--sand); border-radius: 20px; padding: 40px 32px; text-align: center; }
+    .client-login-logo { height: 64px; width: auto; margin-bottom: 20px; }
+    .client-login-card h1 { font-family: 'Lora', serif; font-size: 32px; color: var(--bark); margin-bottom: 10px; }
+    .client-login-card h1 em { font-style: italic; color: var(--terra); }
+    .client-login-card > p { font-size: 14px; color: var(--bark-lt); line-height: 1.6; font-weight: 300; margin-bottom: 24px; }
+    .client-login-card .client-login-error { color: var(--terracotta); font-weight: 500; }
+    .client-login-card label { display: block; text-align: left; font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--sage); margin-bottom: 8px; }
+    .client-login-card input { width: 100%; font: inherit; font-size: 16px; padding: 12px 14px; border: 1px solid var(--tan); border-radius: 10px; background: var(--cream); color: var(--bark); margin-bottom: 16px; }
+    .client-login-card input:focus { outline: 2px solid var(--terra); outline-offset: 1px; }
+    .client-login-card .btn-primary { width: 100%; justify-content: center; border: none; cursor: pointer; }
+    .client-login-card .client-login-help { margin: 20px 0 0; font-size: 13px; }
+    .client-login-card a, .client-resources-note a { color: var(--terra); }
+    .client-resources { max-width: 640px; margin: 0 auto; padding: 60px 24px 100px; }
+    .client-resources-note { text-align: center; font-size: 14px; color: var(--bark-lt); font-weight: 300; }

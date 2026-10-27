@@ -13,6 +13,13 @@
   [headers.values]
     X-Robots-Tag = "noindex"
 
+# Client Resources (/clients/) are password protected by
+# netlify/edge-functions/client-gate.js. Keep them out of Google too.
+[[headers]]
+  for = "/clients/*"
+  [headers.values]
+    X-Robots-Tag = "noindex"
+
 # Short, easy-to-type link for social posts: fuelwithjess.com/macros
 # jumps straight to the Starter Guide sign-up box on the macros blog post.
 # 302 (temporary) so the destination can be changed later without browsers

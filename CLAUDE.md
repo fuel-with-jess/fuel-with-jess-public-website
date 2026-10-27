@@ -19,6 +19,8 @@ contact.html          Ways to connect + next-step CTAs
 apply.html            New client application form (5 questions, ~3-5 min)
 intake.html           New client intake form (20+ questions, ~10-15 min)
 legal.html            Terms / Privacy / Coaching Agreement / Waiver (tabbed)
+clients/index.html    Client Resources (served at /clients/). Password protected, linked as "Client Login" in every footer.
+netlify/edge-functions/client-gate.js  The password check for everything under /clients/.
 blog/index.html       Blog home (served at /blog/). Lists every post.
 blog/*.html           Blog posts (e.g. blog/how-to-count-macros-beginners.html → /blog/how-to-count-macros-beginners)
 css/styles.css        All styling. Color palette is at the top in :root.
@@ -40,6 +42,9 @@ netlify.toml          Netlify settings (image caching for 7 days, keep downloads
 - **Add a new page:** copy an existing page (e.g. `about.html`), swap the content between `<main>` and `</main>`, update the `<title>` and `<meta name="description">`, then add a `<li><a href="newpage.html">…</a></li>` entry to the nav and footer of *every* page.
 - **Email list (Kit):** the popup and blog guide sign-up both send to Kit form `10083869` (`app.kit.com/forms/10083869/subscriptions`, constants at the top of `js/popup.js` and `js/guide-signup.js`). The confirmation email and its wording are set in Kit, not here.
 - **Change the form recipient or booking link:** see the constants at the top of `js/forms.js` (`FORMSPREE_ENDPOINT`, `BOOKING_URL`). The booking link is also hard-coded in the buttons and JSON-LD of the two San Diego pages and the home page JSON-LD; search for `calendar.app.google`.
+
+- **Client Resources password:** set in Netlify as the environment variable `CLIENT_RESOURCES_PASSWORD`, never in this repo (the repo is public on GitHub). To change it: update the variable, trigger a new deploy, send the new password to current clients. Old logins stop working automatically.
+- **Add a client guide:** add a card to `clients/index.html` pointing at the file. Anything committed to this repo can be seen on GitHub, so client files must not go in here while the repo is public.
 
 - **Add a blog post:** copy an existing file in `blog/`, swap the `<article>` content, update the `<title>`, description, canonical URL and the JSON-LD block, then add a card for it to `blog/index.html` (and its `blogPost` entry in that page's JSON-LD) and a line to `sitemap.xml`. Pages in `blog/` use root paths (`/css/styles.css`, `/about.html`) because they live in a subfolder.
 
