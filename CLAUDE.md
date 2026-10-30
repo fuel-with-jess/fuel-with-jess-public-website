@@ -55,8 +55,8 @@ the trade-off for having no build step. **When changing one, change all of them
 to match** — search for "SHARED NAV" and "SHARED FOOTER" comments to find them.
 
 Some facts also live in the **STRUCTURED DATA (JSON-LD)** block in the `<head>`
-of index, about, services, testimonials and the two San Diego pages (prices, FAQ answers, testimonial
-quotes, Jess's links). When you change prices, the FAQ or a testimonial, update
+of index, about, services and the two San Diego pages (prices, FAQ answers,
+Jess's links). When you change prices or the FAQ, update
 that block on the same page too.
 
 ## Workflow rule — always open a PR
