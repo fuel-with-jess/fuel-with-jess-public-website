@@ -735,4 +735,5 @@
     .client-login-card .client-login-help { margin: 20px 0 0; font-size: 13px; }
     .client-login-card a, .client-resources-note a { color: var(--terra); }
     .client-resources { max-width: 640px; margin: 0 auto; padding: 60px 24px 100px; }
+    .client-resources .co-icon { color: var(--terra); }
     .client-resources-note { text-align: center; font-size: 14px; color: var(--bark-lt); font-weight: 300; }
