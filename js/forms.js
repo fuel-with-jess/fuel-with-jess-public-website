@@ -159,6 +159,7 @@ let scaleValues = {};
       'Email': email,
       'Phone': document.getElementById('q-phone') ? document.getElementById('q-phone').value.trim() : '',
       'Age': document.getElementById('q-age') ? document.getElementById('q-age').value.trim() : '',
+      'Height': document.getElementById('q-height') ? document.getElementById('q-height').value.trim() : '',
       'Current weight': document.getElementById('q-weight') ? document.getElementById('q-weight').value.trim() : '',
       'Goals': document.getElementById('q-goals') ? document.getElementById('q-goals').value.trim() : '',
       'Success vision': document.getElementById('q-success') ? document.getElementById('q-success').value.trim() : '',
