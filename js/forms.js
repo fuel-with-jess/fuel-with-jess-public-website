@@ -1,4 +1,6 @@
 // ── Constants ──
+// Update this when the Privacy Policy's "Last Updated" date changes in legal.html.
+const PRIVACY_POLICY_VERSION = 'November 12, 2026';
 const FORMSPREE_ENDPOINT = 'https://formspree.io/f/xqewwlpb';
 const BOOKING_URL = 'https://calendar.app.google/6AvVuMnZChAvvg8Q9';
 
@@ -138,7 +140,7 @@ let scaleValues = {};
     const email = document.getElementById('q-email') ? document.getElementById('q-email').value.trim() : '';
     if (!first || !email) { highlight('q-first'); return; }
     if (!email.includes('@')) { highlight('q-email'); return; }
-    const requiredBoxes = ['agree-coaching','agree-waiver','agree-privacy','agree-accurate','agree-physician'];
+    const requiredBoxes = ['agree-coaching','agree-waiver','agree-privacy','agree-adult','agree-accurate','agree-physician'];
     for (const id of requiredBoxes) {
       const el = document.getElementById(id);
       if (el && !el.checked) {
@@ -176,7 +178,17 @@ let scaleValues = {};
       'Stress level (1-5)': scaleValues['stress-scale'] || '',
       'Lifestyle notes': document.getElementById('q-lifestyle') ? document.getElementById('q-lifestyle').value.trim() : '',
       'Medical / medications': document.getElementById('q-medical') ? document.getElementById('q-medical').value.trim() : '',
-      'Supplements': document.getElementById('q-supps') ? document.getElementById('q-supps').value.trim() : ''
+      'Supplements': document.getElementById('q-supps') ? document.getElementById('q-supps').value.trim() : '',
+      // Consent record: every box below is required to submit, so these are always "Yes".
+      // They're sent so each submission keeps a dated record of what the client agreed to.
+      'Agreed: Coaching Services Agreement': 'Yes',
+      'Agreed: Liability Waiver': 'Yes',
+      'Agreed: Privacy Policy (incl. health info)': 'Yes',
+      'Confirmed: 18 or older': 'Yes',
+      'Confirmed: Info accurate': 'Yes',
+      'Acknowledged: Not medical advice': 'Yes',
+      'Privacy Policy version': PRIVACY_POLICY_VERSION,
+      'Agreed at': new Date().toISOString()
     };
     fetch(FORMSPREE_ENDPOINT, {
       method: 'POST',

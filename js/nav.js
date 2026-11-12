@@ -29,3 +29,11 @@ function switchLegalTab(tabId) {
   var doc = document.getElementById('legal-' + tabId);
   if (doc) doc.classList.add('active');
 }
+
+// Open the matching legal tab when the page is linked as legal.html#privacy, #coaching, #waiver or #terms.
+document.addEventListener('DOMContentLoaded', function() {
+  var tab = (window.location.hash || '').replace('#', '');
+  if (['terms', 'privacy', 'coaching', 'waiver'].indexOf(tab) !== -1 && document.getElementById('legal-' + tab)) {
+    switchLegalTab(tab);
+  }
+});
