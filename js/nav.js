@@ -23,17 +23,17 @@ window.addEventListener('scroll', function() {
 function switchLegalTab(tabId) {
   document.querySelectorAll('.legal-tab').forEach(function(b) { b.classList.remove('active'); });
   document.querySelectorAll('.legal-doc').forEach(function(d) { d.classList.remove('active'); });
-  var tabMap = { terms: 0, privacy: 1, coaching: 2, waiver: 3 };
+  var tabMap = { terms: 0, privacy: 1, coaching: 2, waiver: 3, 'ca-notice': 4 };
   var tabs = document.querySelectorAll('.legal-tab');
   if (tabs[tabMap[tabId]]) tabs[tabMap[tabId]].classList.add('active');
   var doc = document.getElementById('legal-' + tabId);
   if (doc) doc.classList.add('active');
 }
 
-// Open the matching legal tab when the page is linked as legal.html#privacy, #coaching, #waiver or #terms.
+// Open the matching legal tab when the page is linked as legal.html#privacy, #coaching, #waiver, #ca-notice or #terms.
 document.addEventListener('DOMContentLoaded', function() {
   var tab = (window.location.hash || '').replace('#', '');
-  if (['terms', 'privacy', 'coaching', 'waiver'].indexOf(tab) !== -1 && document.getElementById('legal-' + tab)) {
+  if (['terms', 'privacy', 'coaching', 'waiver', 'ca-notice'].indexOf(tab) !== -1 && document.getElementById('legal-' + tab)) {
     switchLegalTab(tab);
   }
 });
