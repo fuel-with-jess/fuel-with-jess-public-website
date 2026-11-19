@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<!--
+  JOURNAL LAUNCH PAGE (served at /journal/)
+
+  Gives each client's journal app (a Google Apps Script web app inside their
+  journal sheet) a home-screen icon with the Fuel with Jess flame, because
+  Google doesn't let Apps Script apps set their own icon.
+
+  Each client gets a link like  https://fuelwithjess.com/journal/#AKfycb...
+  The part after the # is the ID from their app's Web app URL
+  (https://script.google.com/macros/s/<ID>/exec). Browsers never send the
+  part after # to the website, and no client link is stored in this repo.
+
+  To make a client link: open https://fuelwithjess.com/journal/?make and paste
+  the Web app URL from Apps Script (Deploy -> Manage deployments).
+
+  First visit: shows "add to home screen" steps + an "Open my journal" button.
+  After they've opened it once, the link (and the home-screen icon) goes
+  straight to their journal. Add ?setup before the # to see the steps again.
+-->
+<title>My Journal | Fuel with Jess</title>
+<meta name="description" content="Your daily check-in journal with Fuel with Jess.">
+<meta name="robots" content="noindex, nofollow">
+<meta name="apple-mobile-web-app-title" content="My Journal">
+<meta name="application-name" content="My Journal">
+<meta name="theme-color" content="#000000">
+<link rel="apple-touch-icon" sizes="180x180" href="/journal/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="192x192" href="/journal/icon-192.png">
+<link rel="icon" type="image/svg+xml" href="/journal/icon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,600;1,400&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #ECE5D9; --card: #F6F2EA; --sand: #D5CEBF; --sage: #5D5C38; --sage-lt: #888963;
+    --olive: #292A17; --ink: #12120A; --flame: #E07024;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Montserrat', system-ui, sans-serif; background: var(--cream); color: var(--ink);
+    min-height: 100vh; display: flex; justify-content: center; padding: 40px 16px calc(40px + env(safe-area-inset-bottom));
+    line-height: 1.5;
+  }
+  main { width: 100%; max-width: 440px; text-align: center; }
+  .mark { width: 72px; height: 72px; border-radius: 18px; display: block; margin: 0 auto 18px; }
+  .brand { font-weight: 700; letter-spacing: .13em; text-transform: uppercase; font-size: 15px; }
+  .brand em { font-family: 'Lora', serif; font-style: italic; text-transform: none; letter-spacing: 0; font-weight: 400; color: var(--sage); }
+  h1 { font-family: 'Lora', serif; font-weight: 600; font-size: 28px; margin: 22px 0 8px; }
+  p.lead { color: var(--olive); margin-bottom: 24px; }
+  .card { background: var(--card); border: 1px solid var(--sand); border-radius: 16px; padding: 20px; margin-bottom: 16px; text-align: left; }
+  .card h2 { font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--sage); margin-bottom: 12px; }
+  ol { padding-left: 20px; }
+  ol li { margin: 6px 0; }
+  .muted { color: var(--sage-lt); font-size: 13px; margin-top: 12px; }
+  .btn {
+    display: block; width: 100%; background: var(--sage); color: var(--cream); border: 0; border-radius: 999px;
+    padding: 16px; font: inherit; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; font-size: 14px;
+    cursor: pointer; text-decoration: none; text-align: center;
+  }
+  .btn:hover { background: var(--olive); }
+  input {
+    width: 100%; font: inherit; font-size: 15px; background: #FFFDF8; color: var(--ink);
+    border: 1px solid var(--sand); border-radius: 10px; padding: 12px; margin: 8px 0 12px;
+  }
+  .result { word-break: break-all; font-weight: 600; background: #FFFDF8; border: 1px dashed var(--sage-lt); border-radius: 10px; padding: 12px; margin-bottom: 12px; }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<main>
+  <img class="mark" src="/journal/icon.svg" alt="">
+  <div class="brand">Fuel <em>with Jess</em></div>
+
+  <!-- Client, first visit -->
+  <section id="welcome" hidden>
+    <h1>Your daily journal</h1>
+    <p class="lead">Check in each day from your phone. Put it on your home screen so it's one tap away.</p>
+    <div class="card" id="stepsIphone">
+      <h2>On iPhone</h2>
+      <ol>
+        <li>Make sure this page is open in <strong>Safari</strong>.</li>
+        <li>Tap the <strong>Share</strong> button (the square with an arrow).</li>
+        <li>Tap <strong>Add to Home Screen</strong>, then <strong>Add</strong>.</li>
+      </ol>
+    </div>
+    <div class="card" id="stepsAndroid">
+      <h2>On Android</h2>
+      <ol>
+        <li>Open this page in <strong>Chrome</strong>.</li>
+        <li>Tap the <strong>&#8942;</strong> menu (top right).</li>
+        <li>Tap <strong>Add to Home screen</strong>, then <strong>Add</strong>.</li>
+      </ol>
+    </div>
+    <p class="muted" style="margin:0 0 20px">Done? Open your journal below. From now on, the flame icon on your home screen takes you straight there.</p>
+    <a class="btn" id="openBtn" href="#">Open my journal</a>
+    <p class="muted">This link is just for you. Please don't share it.</p>
+  </section>
+
+  <!-- Client, returning (normally they never see this; it redirects) -->
+  <section id="opening" hidden>
+    <h1>Opening your journal&hellip;</h1>
+    <p class="lead">If nothing happens, tap below.</p>
+    <a class="btn" id="openBtn2" href="#">Open my journal</a>
+  </section>
+
+  <!-- No link -->
+  <section id="nolink" hidden>
+    <h1>Almost there</h1>
+    <p class="lead">This page needs your personal journal link. Open the link Jess sent you, or ask her to send it again.</p>
+  </section>
+
+  <!-- Jess: make a client link (fuelwithjess.com/journal/?make) -->
+  <section id="make" hidden>
+    <h1>Make a client link</h1>
+    <div class="card">
+      <h2>Paste the Web app URL</h2>
+      <p>From the client's journal: Extensions &rarr; Apps Script &rarr; Deploy &rarr; Manage deployments &rarr; copy the Web app URL.</p>
+      <input id="makeInput" placeholder="https://script.google.com/macros/s/.../exec" autocomplete="off">
+      <div id="makeOut" hidden>
+        <div class="result" id="makeLink"></div>
+        <button class="btn" id="copyBtn" type="button">Copy link</button>
+      </div>
+      <p class="muted" id="makeErr" hidden>That doesn't look like a Web app URL. It should start with https://script.google.com/macros/s/ and end with /exec.</p>
+    </div>
+  </section>
+</main>
+
+<script>
+(function () {
+  var KEY_ID = 'fwj-journal-id', KEY_OPENED = 'fwj-journal-opened';
+  function get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+  function set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+  function valid(id) { return /^[A-Za-z0-9_-]{20,200}$/.test(id || ''); }
+  function appUrl(id) { return 'https://script.google.com/macros/s/' + id + '/exec'; }
+  function show(id) { document.getElementById(id).hidden = false; }
+
+  var params = new URLSearchParams(location.search);
+
+  // Jess's link maker
+  if (params.has('make')) {
+    show('make');
+    var input = document.getElementById('makeInput');
+    input.addEventListener('input', function () {
+      var m = input.value.trim().match(/script\.google\.com\/(?:a\/[^/]+\/)?macros\/s\/([A-Za-z0-9_-]+)\/exec/);
+      var ok = m && valid(m[1]);
+      document.getElementById('makeOut').hidden = !ok;
+      document.getElementById('makeErr').hidden = ok || !input.value.trim();
+      if (ok) document.getElementById('makeLink').textContent = location.origin + '/journal/#' + m[1];
+    });
+    document.getElementById('copyBtn').addEventListener('click', function () {
+      var text = document.getElementById('makeLink').textContent, btn = this;
+      (navigator.clipboard ? navigator.clipboard.writeText(text) : Promise.reject())
+        .then(function () { btn.textContent = 'Copied'; setTimeout(function () { btn.textContent = 'Copy link'; }, 1500); })
+        .catch(function () { window.prompt('Copy this link:', text); });
+    });
+    return;
+  }
+
+  // Client: the ID comes from the part after #. Android shortcuts can drop it,
+  // so it's also remembered on this phone as a backup.
+  var id = location.hash.slice(1);
+  if (valid(id)) set(KEY_ID, id); else id = get(KEY_ID);
+  if (!valid(id)) { show('nolink'); return; }
+
+  var url = appUrl(id);
+  ['openBtn', 'openBtn2'].forEach(function (b) {
+    var a = document.getElementById(b);
+    a.href = url;
+    a.addEventListener('click', function () { set(KEY_OPENED, '1'); });
+  });
+
+  if (get(KEY_OPENED) && !params.has('setup')) {
+    show('opening');
+    location.replace(url);
+    return;
+  }
+
+  show('welcome');
+  var ua = navigator.userAgent;
+  var isIOS = /iPhone|iPad|iPod/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
+  var isAndroid = /Android/.test(ua);
+  if (isIOS) document.getElementById('stepsAndroid').hidden = true;
+  if (isAndroid) document.getElementById('stepsIphone').hidden = true;
+})();
+</script>
+</body>
+</html>
