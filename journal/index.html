@@ -1,158 +1,886 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <!--
-  JOURNAL LAUNCH PAGE (served at /journal/)
+  CLIENT JOURNAL APP (served at /journal/)
 
-  Gives each client's journal app (a Google Apps Script web app inside their
-  journal sheet) a home-screen icon with the Fuel with Jess flame, because
-  Google doesn't let Apps Script apps set their own icon.
+  Each client's link looks like  https://fuelwithjess.com/journal/#AKfycb...
+  The part after the # is the ID from their journal sheet's Apps Script
+  Web app URL (https://script.google.com/macros/s/<ID>/exec). This page is
+  the whole app; it reads and saves the client's sheet through that script
+  in the background (no Google sign-in involved). Browsers never send the
+  part after # to this website, and no client link is stored in this repo.
 
-  Each client gets a link like  https://fuelwithjess.com/journal/#AKfycb...
-  The part after the # is the ID from their app's Web app URL
-  (https://script.google.com/macros/s/<ID>/exec). Browsers never send the
-  part after # to the website, and no client link is stored in this repo.
+  The matching Code.gs lives in each client's sheet (Extensions -> Apps
+  Script). Make a client link at  https://fuelwithjess.com/journal/?make
+  See a demo with sample data at  https://fuelwithjess.com/journal/#demo
+  (add ?layout=cj, ?layout=el or ?layout=dn before the # for other layouts).
 
-  To make a client link: open https://fuelwithjess.com/journal/?make and paste
-  the Web app URL from Apps Script (Deploy -> Manage deployments).
-
-  First visit: shows "add to home screen" steps + an "Open my journal" button.
-  After they've opened it once, the link (and the home-screen icon) goes
-  straight to their journal. Add ?setup before the # to see the steps again.
+  Kept to plain ASCII on purpose so copy/paste can't garble it.
 -->
 <title>My Journal | Fuel with Jess</title>
 <meta name="description" content="Your daily check-in journal with Fuel with Jess.">
 <meta name="robots" content="noindex, nofollow">
 <meta name="apple-mobile-web-app-title" content="My Journal">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="application-name" content="My Journal">
-<meta name="theme-color" content="#000000">
+<meta name="theme-color" content="#ECE5D9">
 <link rel="apple-touch-icon" sizes="180x180" href="/journal/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="192x192" href="/journal/icon-192.png">
 <link rel="icon" type="image/svg+xml" href="/journal/icon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,600;1,400&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --cream: #ECE5D9; --card: #F6F2EA; --sand: #D5CEBF; --sage: #5D5C38; --sage-lt: #888963;
-    --olive: #292A17; --ink: #12120A; --flame: #E07024;
+    --cream: #ECE5D9; --card: #F6F2EA; --sand: #D5CEBF; --tan: #A8A07A; --mist: #E0D9CC;
+    --sage: #5D5C38; --sage-lt: #888963; --olive: #292A17; --ink: #12120A;
+    --terracotta: #C4622D; --ok: #4E6B3A; --field: #FFFDF8;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { -webkit-text-size-adjust: 100%; }
   body {
     font-family: 'Montserrat', system-ui, sans-serif; background: var(--cream); color: var(--ink);
-    min-height: 100vh; display: flex; justify-content: center; padding: 40px 16px calc(40px + env(safe-area-inset-bottom));
-    line-height: 1.5;
+    padding: env(safe-area-inset-top) 16px calc(96px + env(safe-area-inset-bottom)); max-width: 520px; margin: 0 auto;
+    font-size: 15px; line-height: 1.4;
   }
-  main { width: 100%; max-width: 440px; text-align: center; }
-  .mark { width: 72px; height: 72px; border-radius: 18px; display: block; margin: 0 auto 18px; }
-  .brand { font-weight: 700; letter-spacing: .13em; text-transform: uppercase; font-size: 15px; }
+  header { padding: 20px 0 8px; display: flex; justify-content: space-between; align-items: flex-end; gap: 12px; }
+  .brand { font-weight: 700; letter-spacing: .13em; text-transform: uppercase; font-size: 15px; white-space: nowrap; }
   .brand em { font-family: 'Lora', serif; font-style: italic; text-transform: none; letter-spacing: 0; font-weight: 400; color: var(--sage); }
-  h1 { font-family: 'Lora', serif; font-weight: 600; font-size: 28px; margin: 22px 0 8px; }
-  p.lead { color: var(--olive); margin-bottom: 24px; }
-  .card { background: var(--card); border: 1px solid var(--sand); border-radius: 16px; padding: 20px; margin-bottom: 16px; text-align: left; }
+  .journal-name { font-size: 12px; color: var(--sage-lt); text-align: right; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+  .tabs { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; background: var(--mist); border-radius: 999px; padding: 4px; margin: 10px 0 4px; }
+  .tab { border: 0; background: transparent; font: inherit; font-size: 13px; font-weight: 600; color: var(--olive); padding: 9px 4px; border-radius: 999px; cursor: pointer; }
+  .tab[aria-selected="true"] { background: var(--sage); color: var(--cream); }
+
+  .datebar { display: flex; align-items: center; justify-content: space-between; margin: 12px 0 16px; }
+  .datebar button { background: none; border: 1px solid var(--sand); border-radius: 999px; width: 40px; height: 40px; font-size: 20px; color: var(--sage); cursor: pointer; }
+  .datebar button:disabled { opacity: .35; }
+  .date-label { text-align: center; }
+  .date-label h1 { font-family: 'Lora', serif; font-weight: 600; font-size: 22px; }
+  .date-label a { font-size: 12px; color: var(--sage); cursor: pointer; text-decoration: underline; }
+  .page-title { font-family: 'Lora', serif; font-weight: 600; font-size: 22px; text-align: center; margin: 16px 0; }
+
+  .card { background: var(--card); border: 1px solid var(--sand); border-radius: 16px; padding: 16px; margin-bottom: 14px; }
   .card h2 { font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--sage); margin-bottom: 12px; }
-  ol { padding-left: 20px; }
-  ol li { margin: 6px 0; }
-  .muted { color: var(--sage-lt); font-size: 13px; margin-top: 12px; }
-  .btn {
-    display: block; width: 100%; background: var(--sage); color: var(--cream); border: 0; border-radius: 999px;
-    padding: 16px; font: inherit; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; font-size: 14px;
-    cursor: pointer; text-decoration: none; text-align: center;
+  .hint { font-size: 13px; color: var(--sage-lt); }
+
+  .targets { width: 100%; border-collapse: collapse; font-size: 14px; }
+  .targets th { font-size: 10px; text-transform: uppercase; letter-spacing: .08em; color: var(--sage-lt); font-weight: 600; text-align: right; padding: 0 0 6px; }
+  .targets th:first-child, .targets td:first-child { text-align: left; }
+  .targets td { padding: 8px 0; border-top: 1px solid var(--sand); text-align: right; font-variant-numeric: tabular-nums; }
+  .targets td:first-child { font-weight: 600; }
+  .targets tr.on td:first-child::before { content: ''; display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--sage); margin-right: 7px; vertical-align: 1px; }
+  .targets.has-pick tr:not(.on) td { color: var(--sage-lt); }
+
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .full { grid-column: 1 / -1; }
+  label { display: block; font-size: 12px; font-weight: 600; color: var(--olive); margin-bottom: 6px; }
+  input, textarea, select {
+    width: 100%; font: inherit; font-size: 17px; color: var(--ink); background: var(--field);
+    border: 1px solid var(--sand); border-radius: 10px; padding: 11px 12px; outline: none;
   }
-  .btn:hover { background: var(--olive); }
-  input {
-    width: 100%; font: inherit; font-size: 15px; background: #FFFDF8; color: var(--ink);
-    border: 1px solid var(--sand); border-radius: 10px; padding: 12px; margin: 8px 0 12px;
+  select {
+    appearance: none; -webkit-appearance: none; padding-right: 34px;
+    background: var(--field) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%235D5C38' stroke-width='2'/%3E%3C/svg%3E") no-repeat right 12px center;
   }
-  .result { word-break: break-all; font-weight: 600; background: #FFFDF8; border: 1px dashed var(--sage-lt); border-radius: 10px; padding: 12px; margin-bottom: 12px; }
+  select.empty { color: var(--sage-lt); }
+  textarea { min-height: 84px; resize: vertical; font-size: 15px; }
+  input:focus, textarea:focus, select:focus { border-color: var(--sage); box-shadow: 0 0 0 3px rgba(93,92,56,.15); }
+
+  details summary { cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; }
+  details summary::-webkit-details-marker { display: none; }
+  details summary h2 { margin: 0; }
+  details summary::after { content: '+'; color: var(--sage); font-size: 20px; }
+  details[open] summary::after { content: '\2013'; }
+  details[open] summary { margin-bottom: 12px; }
+
+  .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .stat { background: var(--field); border: 1px solid var(--sand); border-radius: 12px; padding: 12px; }
+  .stat span { display: block; font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--sage-lt); }
+  .stat b { display: block; font-size: 22px; font-weight: 700; margin: 2px 0 0; font-variant-numeric: tabular-nums; }
+  .stat small { font-size: 12px; color: var(--sage-lt); }
+  .days { list-style: none; }
+  .day { border-top: 1px solid var(--sand); padding: 12px 0; cursor: pointer; }
+  .day:first-child { border-top: 0; padding-top: 0; }
+  .day-top { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+  .day-date { font-weight: 600; }
+  .day-date em { font-style: normal; font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--sage); margin-left: 6px; }
+  .day-weight { font-weight: 700; font-variant-numeric: tabular-nums; }
+  .day-line { font-size: 13px; color: var(--olive); margin-top: 4px; }
+  .day-note { font-size: 13px; color: var(--sage-lt); font-style: italic; margin-top: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+  .tag { font-size: 12px; font-weight: 600; background: var(--mist); color: var(--olive); border-radius: 999px; padding: 3px 10px; }
+  .day.empty .day-date { color: var(--sage-lt); font-weight: 500; }
+  .day.empty .day-line { color: var(--sage-lt); }
+
+  .weeks { width: 100%; border-collapse: collapse; font-size: 14px; }
+  .weeks td { padding: 7px 0; border-top: 1px solid var(--sand); }
+  .weeks td:nth-child(2) { text-align: right; font-weight: 600; }
+  .weeks td:nth-child(3) { text-align: right; width: 72px; font-size: 13px; }
+  .down { color: var(--ok); } .up { color: var(--terracotta); }
+  svg.spark { width: 100%; height: 64px; margin-bottom: 8px; }
+
+  /* weekly macros */
+  .week summary { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+  .week summary::after { content: '+'; color: var(--sage); font-size: 20px; flex-shrink: 0; }
+  .week[open] summary::after { content: '\2013'; }
+  .week-name { font-family: 'Lora', serif; font-weight: 600; font-size: 18px; }
+  .week-sub { font-size: 13px; color: var(--sage-lt); }
+  .badge { display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; background: var(--sage); color: var(--cream); border-radius: 999px; padding: 3px 9px; margin-left: 8px; vertical-align: 3px; }
+  .week-body { margin-top: 14px; }
+  .week-body h3 { font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--sage); margin: 16px 0 10px; }
+  .meals { width: 100%; border-collapse: collapse; font-size: 14px; font-variant-numeric: tabular-nums; }
+  .meals th { font-size: 10px; text-transform: uppercase; letter-spacing: .08em; color: var(--sage-lt); font-weight: 600; text-align: right; padding: 0 0 6px; }
+  .meals td { padding: 8px 0; border-top: 1px solid var(--sand); text-align: right; }
+  .meals th:first-child, .meals td:first-child { text-align: left; }
+  .meals tr.total td { font-weight: 700; border-top: 2px solid var(--sand); }
+  .meals small { color: var(--sage-lt); font-size: 12px; }
+
+  .shots { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .shot { position: relative; aspect-ratio: 3 / 4; border: 1.5px dashed var(--tan); border-radius: 12px; background: var(--field); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; cursor: pointer; overflow: hidden; color: var(--sage); font-size: 13px; font-weight: 600; text-align: center; }
+  .shot svg { width: 26px; height: 26px; }
+  .shot img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .shot .label { position: absolute; left: 6px; bottom: 6px; background: rgba(18,18,10,.7); color: var(--cream); font-size: 11px; padding: 2px 8px; border-radius: 999px; }
+  .shot.has { border-style: solid; border-color: var(--sage); }
+  .shot input { display: none; }
+  .recent { list-style: none; font-size: 14px; }
+  .recent li { padding: 7px 0; border-top: 1px solid var(--sand); display: flex; justify-content: space-between; }
+  .recent li:first-child { border-top: 0; }
+
+  .savebar {
+    position: fixed; left: 0; right: 0; bottom: 0; padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+    background: rgba(236,229,217,.96); border-top: 1px solid var(--sand); backdrop-filter: blur(10px);
+  }
+  .savebar-inner { max-width: 520px; margin: 0 auto; display: flex; align-items: center; gap: 12px; }
+  .save { flex: 1; background: var(--sage); color: var(--cream); border: 0; border-radius: 999px; padding: 15px; font: inherit; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; font-size: 14px; cursor: pointer; }
+  .save:disabled { opacity: .5; }
+  .status { font-size: 13px; color: var(--sage-lt); min-width: 84px; text-align: right; }
+  .status.ok { color: var(--ok); } .status.err { color: var(--terracotta); }
+  .banner { background: #F4E3D7; border: 1px solid #E2BFA7; color: #7A3A17; border-radius: 12px; padding: 12px 14px; font-size: 13px; margin-bottom: 14px; }
+  .loading { opacity: .5; pointer-events: none; }
+  .tip { background: var(--card); border: 1px solid var(--sand); border-radius: 14px; padding: 14px 16px; margin: 10px 0 4px; font-size: 13px; color: var(--olive); }
+  .tip b { color: var(--ink); }
+  .tip-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+  .tip-top strong { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--sage); }
+  .tip button { background: none; border: 0; color: var(--sage); font: inherit; font-weight: 600; font-size: 13px; cursor: pointer; padding: 4px; }
+  .center { text-align: center; }
+  .result { word-break: break-all; font-weight: 600; background: var(--field); border: 1px dashed var(--sage-lt); border-radius: 10px; padding: 12px; margin: 12px 0; font-size: 14px; }
   [hidden] { display: none !important; }
 </style>
 </head>
 <body>
-<main>
-  <img class="mark" src="/journal/icon.svg" alt="">
-  <div class="brand">Fuel <em>with Jess</em></div>
+  <header>
+    <div class="brand">Fuel <em>with Jess</em></div>
+    <div class="journal-name" id="journalName"></div>
+  </header>
 
-  <!-- Client, first visit -->
-  <section id="welcome" hidden>
-    <h1>Your daily journal</h1>
-    <p class="lead">Check in each day from your phone. Put it on your home screen so it's one tap away.</p>
-    <div class="card" id="stepsIphone">
-      <h2>On iPhone</h2>
-      <ol>
-        <li>Make sure this page is open in <strong>Safari</strong>.</li>
-        <li>Tap the <strong>Share</strong> button (the square with an arrow).</li>
-        <li>Tap <strong>Add to Home Screen</strong>, then <strong>Add</strong>.</li>
-      </ol>
-    </div>
-    <div class="card" id="stepsAndroid">
-      <h2>On Android</h2>
-      <ol>
-        <li>Open this page in <strong>Chrome</strong>.</li>
-        <li>Tap the <strong>&#8942;</strong> menu (top right).</li>
-        <li>Tap <strong>Add to Home screen</strong>, then <strong>Add</strong>.</li>
-      </ol>
-    </div>
-    <p class="muted" style="margin:0 0 20px">Done? Open your journal below. From now on, the flame icon on your home screen takes you straight there.</p>
-    <a class="btn" id="openBtn" href="#">Open my journal</a>
-    <p class="muted">This link is just for you. Please don't share it.</p>
-  </section>
-
-  <!-- Client, returning (normally they never see this; it redirects) -->
-  <section id="opening" hidden>
-    <h1>Opening your journal&hellip;</h1>
-    <p class="lead">If nothing happens, tap below.</p>
-    <a class="btn" id="openBtn2" href="#">Open my journal</a>
-  </section>
+  <!-- First visit: home-screen tip -->
+  <div class="tip" id="installTip" hidden>
+    <div class="tip-top"><strong>Add to your home screen</strong><button type="button" id="tipClose">Got it</button></div>
+    <div id="tipIphone">In Safari, tap <b>Share</b> (the square with an arrow), then <b>Add to Home Screen</b>.</div>
+    <div id="tipAndroid">In Chrome, tap the <b>&#8942;</b> menu, then <b>Add to Home screen</b>.</div>
+  </div>
 
   <!-- No link -->
-  <section id="nolink" hidden>
-    <h1>Almost there</h1>
-    <p class="lead">This page needs your personal journal link. Open the link Jess sent you, or ask her to send it again.</p>
+  <section id="nolink" class="center" hidden>
+    <h1 class="page-title">Almost there</h1>
+    <p class="hint">This page needs your personal journal link. Open the link Jess sent you, or ask her to send it again.</p>
   </section>
 
-  <!-- Jess: make a client link (fuelwithjess.com/journal/?make) -->
+  <!-- Jess: make a client link (/journal/?make) -->
   <section id="make" hidden>
-    <h1>Make a client link</h1>
+    <h1 class="page-title">Make a client link</h1>
     <div class="card">
       <h2>Paste the Web app URL</h2>
-      <p>From the client's journal: Extensions &rarr; Apps Script &rarr; Deploy &rarr; Manage deployments &rarr; copy the Web app URL.</p>
-      <input id="makeInput" placeholder="https://script.google.com/macros/s/.../exec" autocomplete="off">
+      <p class="hint">From the client's journal: Extensions &rarr; Apps Script &rarr; Deploy &rarr; Manage deployments &rarr; copy the Web app URL.</p>
+      <input id="makeInput" placeholder="https://script.google.com/macros/s/.../exec" autocomplete="off" style="margin-top:10px">
       <div id="makeOut" hidden>
         <div class="result" id="makeLink"></div>
-        <button class="btn" id="copyBtn" type="button">Copy link</button>
+        <button class="save" id="copyBtn" type="button" style="width:100%">Copy link</button>
       </div>
-      <p class="muted" id="makeErr" hidden>That doesn't look like a Web app URL. It should start with https://script.google.com/macros/s/ and end with /exec.</p>
+      <p class="hint" id="makeErr" hidden style="margin-top:10px">That doesn't look like a Web app URL. It should start with https://script.google.com/macros/s/ and end with /exec.</p>
     </div>
   </section>
-</main>
+
+  <div id="app" hidden>
+  <div id="loadError" class="banner" hidden style="margin-top:12px"></div>
+  <nav class="tabs" role="tablist">
+    <button class="tab" role="tab" data-tab="checkin" aria-selected="true">Check-in</button>
+    <button class="tab" role="tab" data-tab="overview" aria-selected="false">Overview</button>
+    <button class="tab" role="tab" data-tab="macros" aria-selected="false" id="macrosTab" hidden>Macros</button>
+    <button class="tab" role="tab" data-tab="photos" aria-selected="false">Photos</button>
+  </nav>
+
+  <div class="datebar" id="datebar">
+    <button id="prev" aria-label="Previous day">&lsaquo;</button>
+    <div class="date-label"><h1 id="dateTitle">Today</h1><a id="todayLink" hidden>Back to today</a></div>
+    <button id="next" aria-label="Next day">&rsaquo;</button>
+  </div>
+
+  <!-- ================= CHECK-IN (fields are built from the sheet's columns) ================= -->
+  <main id="checkin" class="panel">
+    <div id="notInSheet" class="banner" hidden>This date isn't in your journal yet, so it can't be saved. Let Jess know and she'll add more weeks.</div>
+
+    <section class="card" id="targetsCard">
+      <h2>Your targets</h2>
+      <table class="targets" id="targets"></table>
+    </section>
+
+    <section class="card">
+      <h2>Check-in</h2>
+      <div class="grid" id="mainFields"></div>
+    </section>
+
+    <details class="card" id="wearableCard" hidden>
+      <summary><h2>Recovery (WHOOP)</h2></summary>
+      <div class="grid" id="wearableFields"></div>
+    </details>
+  </main>
+
+  <!-- ================= OVERVIEW ================= -->
+  <main id="overview" class="panel" hidden>
+    <h1 class="page-title">Your last 10 days</h1>
+    <section class="card" id="linksCard" hidden>
+      <h2>Weekly check-in</h2>
+      <div id="links"></div>
+    </section>
+    <section class="card">
+      <h2>At a glance</h2>
+      <div class="stats" id="stats"></div>
+    </section>
+    <section class="card">
+      <h2>Day by day</h2>
+      <p class="hint" style="margin:-4px 0 12px">Tap a day to add or fix anything.</p>
+      <ul class="days" id="days"></ul>
+    </section>
+    <section class="card">
+      <h2>Weekly average weight</h2>
+      <div id="weekly"></div>
+    </section>
+  </main>
+
+  <!-- ================= MACROS (weekly blocks from the sheet's Macros tab) ================= -->
+  <main id="macros" class="panel" hidden>
+    <h1 class="page-title">Your weekly macros</h1>
+    <div id="weeks"></div>
+  </main>
+
+  <!-- ================= PHOTOS ================= -->
+  <main id="photos" class="panel" hidden>
+    <section class="card">
+      <h2>Progress pictures</h2>
+      <p class="hint" style="margin-bottom:14px">Same spot, same lighting, same time of day. Tap each box to take or choose a photo.</p>
+      <div class="shots" id="shots"></div>
+    </section>
+    <section class="card">
+      <h2>Already in your journal</h2>
+      <ul class="recent" id="recentPhotos"></ul>
+    </section>
+  </main>
+
+  <div class="savebar" id="savebar"><div class="savebar-inner">
+    <button class="save" id="save">Save check-in</button>
+    <span class="status" id="status"></span>
+  </div></div>
+  </div><!-- /app -->
 
 <script>
-(function () {
-  var KEY_ID = 'fwj-journal-id', KEY_OPENED = 'fwj-journal-opened';
-  function get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
-  function set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
-  function valid(id) { return /^[A-Za-z0-9_-]{20,200}$/.test(id || ''); }
-  function appUrl(id) { return 'https://script.google.com/macros/s/' + id + '/exec'; }
-  function show(id) { document.getElementById(id).hidden = false; }
+/* Special characters made from codes so copy/paste can't garble them. */
+var DASH = String.fromCharCode(8212), DOT = ' ' + String.fromCharCode(183) + ' ';
+var ELLIPSIS = String.fromCharCode(8230), CHECK = String.fromCharCode(10003);
 
+/* =====================================================================
+   Talking to the sheet (or sample data when previewing outside Google)
+   ===================================================================== */
+var DEMO = false;   // true for /journal/#demo (sample data, nothing saved)
+var API = '';       // the client's Apps Script Web app URL, built from the link
+
+/* Every request goes to the client's sheet script without cookies, so it
+   works the same whether or not the phone is signed into Google. */
+function call(fn, args) {
+  if (DEMO) {
+    return new Promise(function (resolve, reject) {
+      setTimeout(function () { try { resolve(MOCK[fn].apply(null, args || [])); } catch (e) { reject(e); } }, 250);
+    });
+  }
+  return fetch(API, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: JSON.stringify({ action: fn, args: args || [] }),
+    credentials: 'omit',
+    redirect: 'follow',
+  }).then(function (r) {
+    if (!r.ok) throw new Error('Couldn\'t reach your journal (error ' + r.status + '). Please try again.');
+    return r.text();
+  }).then(function (t) {
+    var j;
+    try { j = JSON.parse(t); } catch (e) {
+      throw new Error('Your journal needs a quick update from Jess before this works. Please let her know.');
+    }
+    if (!j.ok) throw new Error(j.error || 'Something went wrong. Please try again.');
+    return j.data;
+  });
+}
+
+/* Sample data - only used for the demo (/journal/#demo).
+   Add ?layout=cj, ?layout=el or ?layout=dn before the # for other journals. */
+var MOCK = (function () {
+  var el = /layout=el/.test(location.search);
+  var dn = /layout=dn/.test(location.search);
+  var cj = el || dn || /layout=cj/.test(location.search);
+  function shift(k, n) { var d = fromKey(k); d.setDate(d.getDate() + n); return keyOf(d); }
+  var t = keyOf(new Date());
+  var fields = cj ? [
+    { key: 'weight', role: 'weight', label: 'Weight (Lbs)', hint: '', type: 'number' },
+    { key: 'steps', role: 'steps', label: 'Step Count', hint: '', type: 'number' },
+    { key: 'exercise', role: 'exercise', label: 'Exercise', hint: '', type: 'select', options: ['Lifting', 'Cardio', 'Rest'] },
+    { key: 'nutrition', role: 'nutrition', label: 'Nutrition', hint: '', type: 'text' },
+    { key: 'sleep', role: 'sleep', label: 'Sleep (Hrs)', hint: '', type: 'number' },
+    { key: 'energy', role: 'energy', label: 'Energy (1-10)', hint: '', type: 'number', scale: true },
+    { key: 'water', role: 'water', label: 'Water Intake', hint: '', type: 'select', options: ['<1 gal', '1 gal', '>1gal'] },
+    { key: 'notes', role: 'notes', label: 'Notes', hint: 'Cheat Meal, Digestion, Anything Else', type: 'long' },
+  ] : [
+    { key: 'weight', role: 'weight', label: 'Weight (lb)', hint: '', type: 'number' },
+    { key: 'steps', role: 'steps', label: 'Step Count', hint: '', type: 'number' },
+    { key: 'exercise', role: 'exercise', label: 'Exercise', hint: '', type: 'select', options: ['Oly', 'Rest'] },
+    { key: 'nutrition', role: 'nutrition', label: 'Nutrition', hint: '', type: 'select', options: ['Lift', 'Rest'] },
+    { key: 'sleep', role: 'sleep', label: 'Sleep (Hrs)', hint: '', type: 'number' },
+    { key: 'water', role: 'water', label: 'Water', hint: '', type: 'select', options: ['<1 Gal', '1 Gal', '>1 Gal'] },
+    { key: 'notes', role: 'notes', label: 'Notes', hint: '', type: 'long' },
+    { key: 'recovery', role: 'recovery', label: 'Recovery %', hint: '', type: 'number', wearable: true },
+    { key: 'hrv', role: 'hrv', label: 'HRV (ms)', hint: '', type: 'number', wearable: true },
+    { key: 'rhr', role: 'rhr', label: 'Resting HR', hint: '', type: 'number', wearable: true },
+    { key: 'strain', role: 'strain', label: 'Day Strain', hint: '', type: 'number', wearable: true },
+  ];
+  var targets = cj ? [{ label: 'Daily', calories: '1,860', carbs: '200g', fat: '60g', protein: '130g' }] : [
+    { label: 'Heavy Lift', calories: '2,300', carbs: '269g', fat: '68g', protein: '155g' },
+    { label: 'Lighter Lift', calories: '2,000', carbs: '211g', fat: '62g', protein: '155g' },
+    { label: 'Rest Day', calories: '1,750', carbs: '155g', fat: '55g', protein: '155g' },
+  ];
+  var sample = cj ? [
+    { weight: 182.4, steps: 8120, exercise: 'Lifting', nutrition: 'On track', sleep: 7, energy: 6, water: '1 gal' },
+    { weight: 182.0, steps: 10450, exercise: 'Cardio', nutrition: 'On track', sleep: 7.5, energy: 7, water: '>1gal' },
+    null,
+    { weight: 181.6, steps: 4300, exercise: 'Rest', nutrition: 'Pizza night', sleep: 8, energy: 5, water: '<1 gal', notes: 'Cheat meal Friday, a bit bloated.' },
+    { weight: 181.8, steps: 9200, exercise: 'Lifting', nutrition: 'On track', sleep: 6.5, energy: 7, water: '1 gal' },
+    null,
+    { weight: 181.2, steps: 11000, exercise: 'Cardio', nutrition: 'On track', sleep: 7.2, energy: 8, water: '1 gal', notes: 'Digestion much better.' },
+    { weight: 180.9, steps: 9800, exercise: 'Lifting', nutrition: 'On track', sleep: 7.8, energy: 8, water: '>1gal' },
+    null, null,
+  ] : [
+    { weight: 168.4, steps: 12172, exercise: 'Oly', nutrition: 'Lift', sleep: 8.8, water: '1 Gal', recovery: 33, hrv: 46, rhr: 67, strain: 3.2 },
+    { weight: 168.0, steps: 13091, exercise: 'Oly', nutrition: 'Lift', sleep: 8, water: '>1 Gal' },
+    null,
+    { weight: 167.6, steps: 3770, exercise: 'Rest', nutrition: 'Rest', sleep: 11.5, water: '<1 Gal', notes: 'Tired, slept in.' },
+    { weight: 167.2, steps: 11799, exercise: 'Oly', nutrition: 'Lift', sleep: 9.4, water: '1 Gal', recovery: 38, hrv: 38, rhr: 61, strain: 9.9 },
+    null, null,
+    { weight: 166.9, steps: 9420, exercise: 'Rest', nutrition: 'Rest', sleep: 7.9, water: '<1 Gal' },
+    { weight: 166.8, steps: 10230, exercise: 'Oly', nutrition: 'Lift', sleep: 8.2, water: '1 Gal' },
+    null,
+  ];
+  if (el) {
+    fields = fields.map(function (f) {
+      if (f.key === 'nutrition') return Object.assign({}, f, { suggestions: ['On Plan', 'Off Plan', 'Cheat Meal'] });
+      if (f.key === 'exercise') return Object.assign({}, f, { options: ['Lifting', 'Cardio (zone 2 or higher)', 'Rest'] });
+      return f;
+    });
+    fields.splice(5, 0, { key: 'stress', role: 'stress', label: 'Stress (1-10)', hint: '', type: 'number', scale: true });
+    targets = [{ label: 'Daily', calories: '2,555', carbs: '280g', fat: '75g', protein: '190g' }];
+    sample.forEach(function (v, i) { if (v) { v.stress = 3 + (i % 4); v.nutrition = i % 3 ? 'On Plan' : 'Off Plan'; } });
+  }
+  if (dn) {
+    fields = fields.filter(function (f) { return f.key !== 'energy'; }).map(function (f) {
+      if (f.key === 'exercise') return Object.assign({}, f, { label: 'Movement' });
+      if (f.key === 'nutrition') return Object.assign({}, f, { suggestions: ['On Plan', 'Off Plan'] });
+      return f;
+    });
+    fields.splice(5, 0, { key: 'c7', role: '', label: 'Recovery (1-10)', hint: '', type: 'number', scale: true });
+    targets = [{ label: 'Daily', calories: '2405', carbs: '280g', fat: '65g', protein: '175g' }];
+    sample.forEach(function (v, i) { if (v) { v.c7 = 5 + (i % 4); delete v.energy; } });
+  }
+  var store = {};
+  sample.forEach(function (v, i) { if (v) store[shift(t, i - 9)] = v; });
+  var weekly = [
+    { weekOf: '2026-10-19', avg: 184.1, days: 6 }, { weekOf: '2026-10-26', avg: 183.0, days: 7 },
+    { weekOf: '2026-11-02', avg: 182.2, days: 5 }, { weekOf: '2026-11-09', avg: 181.5, days: 6 },
+  ];
+  var photoLog = [];
+  function monday(off) { var d = new Date(); d.setDate(d.getDate() - ((d.getDay() + 6) % 7) + off); return keyOf(d); }
+  var macroWeeks = [-7, 0, 7].map(function (off, i) {
+    var c = [180, 205, 230][i];
+    return { title: niceDate(monday(off), { month: 'short', day: 'numeric' }) + ' - ' + niceDate(monday(off + 6), { month: 'short', day: 'numeric', year: 'numeric' }),
+      start: monday(off), end: monday(off + 6), week: 'Week ' + (i + 1), calories: String(1880 + i * 100).replace(/(\d)(\d{3})$/, '$1,$2'),
+      macroHeaders: ['Macros', 'Calories'],
+      macros: [{ label: 'Carbohydrates', values: [c + 'g', String(c * 4)] }, { label: 'Fats', values: ['60g', '540'] }, { label: 'Protein', values: ['155g', '620'] }],
+      mealHeaders: ['Carbs (g)', 'Fat (g)', 'Protein (g)'],
+      meals: [{ label: 'Breakfast (~25%)', values: [String(c * .25 | 0), '15', '40'] }, { label: 'Lunch (~27%)', values: [String(c * .27 | 0), '15', '45'] },
+        { label: 'Snack (~16%)', values: [String(c * .16 | 0), '10', '25'] }, { label: 'Dinner (~31%)', values: [String(c * .32 | 0), '20', '45'] }],
+      total: { label: 'TOTAL', values: [String(c), '60', '155'] } };
+  });
+  var name = cj ? 'CJ Daily Journal (sample)' : 'My Daily Journal (sample)';
+  var links = el ? [{ label: 'Weekly Client Check In Form', url: 'https://example.com/form' }] : [];
+  if (el) name = 'Elliott Daily Journal (sample)';
+  if (dn) name = 'Denise Daily Tracker (sample)';
+  function get(k) { return { journalName: name, targets: targets, fields: fields, entry: store[k] || {}, dateInSheet: true, hasMacros: cj && !el, links: links }; }
+  return {
+    getJournal: get,
+    saveCheckIn: function (k, v) { store[k] = v; return get(k); },
+    getOverview: function (today) {
+      var days = [];
+      for (var i = 9; i >= 0; i--) { var k = shift(today, -i); days.push({ date: k, values: store[k] || null }); }
+      return { journalName: name, fields: fields, links: links, days: days, weekly: weekly };
+    },
+    getMacros: function () { return { journalName: name, weeks: macroWeeks }; },
+    getPhotos: function () { return { recent: photoLog }; },
+    savePhotos: function (k, p) {
+      photoLog = [{ label: k }].concat(photoLog.filter(function (x) { return x.label !== k; }));
+      return { saved: Object.keys(p), recent: photoLog };
+    },
+  };
+})();
+
+/* =====================================================================
+   Shared bits
+   ===================================================================== */
+function keyOf(d) { return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
+function fromKey(k) { var p = k.split('-'); return new Date(+p[0], +p[1] - 1, +p[2]); }
+function niceDate(k, opts) { return /^\d{4}-\d{2}-\d{2}$/.test(k) ? fromKey(k).toLocaleDateString(undefined, opts || { month: 'short', day: 'numeric', year: 'numeric' }) : k; }
+function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+function has(v) { return v !== undefined && v !== null && String(v).trim() !== ''; }
+function num(v) { var n = parseFloat(String(v).replace(/,/g, '')); return isNaN(n) ? null : n; }
+function round1(n) { return Math.round(n * 10) / 10; }
+function byRole(fields, role) { return (fields || []).filter(function (f) { return f.role === role; })[0]; }
+var $ = function (id) { return document.getElementById(id); };
+
+var todayKey = keyOf(new Date());
+var currentKey = todayKey;
+var tab = 'checkin';
+var dirty = false;
+
+function setStatus(text, cls) { var s = $('status'); s.textContent = text; s.className = 'status ' + (cls || ''); }
+function markDirty() { dirty = true; setStatus('Not saved'); }
+function okToLeave() { return !dirty || confirm('You have unsaved changes. Leave anyway?'); }
+
+var SAVE_LABEL = { checkin: 'Save check-in', photos: 'Upload photos' };
+
+function showTab(t, force) {
+  if (t === tab && !force) return;
+  if (!okToLeave()) return;
+  dirty = false;
+  tab = t;
+  document.querySelectorAll('.tab').forEach(function (b) { b.setAttribute('aria-selected', String(b.dataset.tab === t)); });
+  document.querySelectorAll('.panel').forEach(function (p) { p.hidden = p.id !== t; });
+  var readOnly = t === 'overview' || t === 'macros';
+  $('datebar').hidden = readOnly;
+  $('savebar').hidden = readOnly;
+  if (SAVE_LABEL[t]) $('save').textContent = SAVE_LABEL[t];
+  window.scrollTo(0, 0);
+  load(readOnly ? todayKey : currentKey);
+}
+
+function load(key) {
+  currentKey = key;
+  $('dateTitle').textContent = key === todayKey ? 'Today' : niceDate(key, { weekday: 'short', month: 'short', day: 'numeric' });
+  $('todayLink').hidden = key === todayKey;
+  $('next').disabled = key >= todayKey;
+  var panel = $(tab);
+  panel.classList.add('loading');
+  setStatus('Loading' + ELLIPSIS);
+  var p = tab === 'checkin' ? loadCheckin(key) : tab === 'overview' ? loadOverview() : tab === 'macros' ? loadMacros() : loadPhotos();
+  $('loadError').hidden = true;
+  p.then(function () { dirty = false; setStatus(''); })
+   .catch(function (e) {
+     setStatus('Couldn\'t load', 'err'); console.error(e);
+     var msg = e && e.message && !/fetch|network|load failed/i.test(e.message) ? e.message
+       : 'Couldn\'t reach your journal. Check your internet connection and try again. If it keeps happening, let Jess know.';
+     $('loadError').textContent = msg; $('loadError').hidden = false;
+   })
+   .finally(function () { panel.classList.remove('loading'); });
+}
+
+/* =====================================================================
+   Check-in: the form is built from the journal's own columns
+   ===================================================================== */
+var journal = null;
+
+function loadCheckin(key) {
+  return call('getJournal', [key]).then(function (j) { journal = j; renderCheckin(); });
+}
+
+function fieldHtml(f, value) {
+  var id = 'f_' + f.key, v = has(value) ? String(value) : '';
+  var lab = '<label for="' + id + '">' + esc(f.label) + '</label>';
+  var ph = esc(f.hint || (f.type === 'long' ? 'Energy, hunger, stress, wins' + ELLIPSIS : DASH));
+  if (f.type === 'select') {
+    var opts = (f.options || []).slice();
+    if (v && opts.indexOf(v) < 0) opts.push(v);
+    return '<div>' + lab + '<select id="' + id + '" data-k="' + f.key + '" class="' + (v ? '' : 'empty') + '">' +
+      '<option value="">Choose' + ELLIPSIS + '</option>' +
+      opts.map(function (o) { return '<option' + (o === v ? ' selected' : '') + '>' + esc(o) + '</option>'; }).join('') +
+      '</select></div>';
+  }
+  if (f.type === 'long') {
+    return '<div class="full">' + lab + '<textarea id="' + id + '" data-k="' + f.key + '" placeholder="' + ph + '">' + esc(v) + '</textarea></div>';
+  }
+  var mode = f.type === 'number' ? (f.role === 'steps' || f.role === 'rhr' ? 'numeric' : 'decimal') : 'text';
+  var list = '', listAttr = '';
+  if (f.suggestions && f.suggestions.length) {
+    listAttr = ' list="dl_' + f.key + '" autocomplete="off"';
+    list = '<datalist id="dl_' + f.key + '">' + f.suggestions.map(function (o) { return '<option value="' + esc(o) + '">'; }).join('') + '</datalist>';
+  }
+  return '<div>' + lab + '<input id="' + id + '" data-k="' + f.key + '" inputmode="' + mode + '" placeholder="' + ph + '" value="' + esc(v) + '"' + listAttr + '>' + list + '</div>';
+}
+
+function renderCheckin() {
+  var e = journal.entry || {};
+  var fields = journal.fields || [];
+  $('journalName').textContent = journal.journalName || '';
+  $('notInSheet').hidden = journal.dateInSheet;
+  $('macrosTab').hidden = !journal.hasMacros;
+
+  var main = fields.filter(function (f) { return !f.wearable; });
+  var wear = fields.filter(function (f) { return f.wearable; });
+  // long fields (notes) go last so the two-column grid stays tidy
+  main = main.filter(function (f) { return f.type !== 'long'; }).concat(main.filter(function (f) { return f.type === 'long'; }));
+  $('mainFields').innerHTML = main.map(function (f) { return fieldHtml(f, e[f.key]); }).join('');
+  $('wearableFields').innerHTML = wear.map(function (f) { return fieldHtml(f, e[f.key]); }).join('');
+  $('wearableCard').hidden = !wear.length;
+  if (wear.some(function (f) { return has(e[f.key]); })) $('wearableCard').open = true;
+
+  document.querySelectorAll('#checkin [data-k]').forEach(function (el) {
+    el.addEventListener(el.tagName === 'SELECT' ? 'change' : 'input', function () {
+      markDirty();
+      if (el.tagName === 'SELECT') el.classList.toggle('empty', !el.value);
+      if (el.dataset.k === 'nutrition') renderTargets();
+    });
+  });
+  renderTargets(); updateSaveEnabled();
+}
+
+/* Highlights the target rows that match the Nutrition entry
+   (e.g. "Lift" -> Heavy Lift + Lighter Lift). */
+function renderTargets() {
+  var t = journal.targets || [];
+  $('targetsCard').hidden = !t.length;
+  var nut = $('f_nutrition');
+  var pick = nut ? (nut.value || '').trim().toLowerCase() : '';
+  var any = false;
+  var rows = t.map(function (x) {
+    var on = t.length > 1 && pick && x.label.toLowerCase().indexOf(pick) >= 0;
+    if (on) any = true;
+    return '<tr class="' + (on ? 'on' : '') + '"><td>' + esc(x.label) + '</td><td>' + esc(x.calories) + '</td><td>' + esc(x.carbs) +
+      '</td><td>' + esc(x.fat) + '</td><td>' + esc(x.protein) + '</td></tr>';
+  }).join('');
+  $('targets').className = 'targets' + (any ? ' has-pick' : '');
+  $('targets').innerHTML = '<tr><th>' + (t.length > 1 ? 'Day' : '') + '</th><th>Cals</th><th>Carbs</th><th>Fat</th><th>Protein</th></tr>' + rows;
+}
+
+function saveCheckin() {
+  var values = {};
+  document.querySelectorAll('#checkin [data-k]').forEach(function (el) { values[el.dataset.k] = el.value; });
+  return call('saveCheckIn', [currentKey, values]).then(function (j) { journal = j; renderCheckin(); });
+}
+
+/* =====================================================================
+   Overview (last 10 days)
+   ===================================================================== */
+function loadOverview() {
+  return call('getOverview', [todayKey]).then(function (o) {
+    $('journalName').textContent = o.journalName || '';
+    renderLinks(o.links || []);
+    renderStats(o.fields || [], o.days); renderDays(o.fields || [], o.days); renderWeekly(o.weekly || []);
+  });
+}
+
+/* Links from the sheet's header row (e.g. "Weekly Client Check In Form"). */
+function renderLinks(links) {
+  $('linksCard').hidden = !links.length;
+  $('links').innerHTML = links.map(function (l, i) {
+    return '<a class="save" style="display:block;text-align:center;text-decoration:none;' + (i ? 'margin-top:10px;' : '') + '" href="' + esc(l.url) +
+      '" target="_blank" rel="noopener">' + esc(l.label) + '</a>';
+  }).join('');
+}
+
+function scaleName(f) { return f.label.replace(/\s*\(\s*1\s*-\s*10\s*\)/, ''); }
+
+function avgOf(days, k) {
+  var list = days.map(function (d) { return d.values ? num(d.values[k]) : null; }).filter(function (n) { return n !== null; });
+  return list.length ? { avg: list.reduce(function (a, b) { return a + b; }, 0) / list.length, n: list.length } : null;
+}
+
+function renderStats(fields, days) {
+  var logged = days.filter(function (d) { return d.values && Object.keys(d.values).some(function (k) { return has(d.values[k]); }); }).length;
+  var tiles = [];
+  if (byRole(fields, 'weight')) {
+    var weights = days.filter(function (d) { return d.values && num(d.values.weight) !== null; });
+    if (weights.length >= 2) {
+      var first = num(weights[0].values.weight), last = num(weights[weights.length - 1].values.weight);
+      var diff = round1(last - first);
+      tiles.push(['Weight', (diff > 0 ? '+' : '') + diff + ' lb', last + ' lb now', diff < 0 ? 'down' : diff > 0 ? 'up' : '']);
+    } else if (weights.length === 1) {
+      tiles.push(['Weight', num(weights[0].values.weight) + ' lb', 'log more days to see change', '']);
+    } else {
+      tiles.push(['Weight', DASH, 'no weigh-ins yet', '']);
+    }
+  }
+  function avgTile(role, title, fmt, unit) {
+    if (!byRole(fields, role)) return;
+    var a = avgOf(days, role);
+    tiles.push([title, a ? fmt(a.avg) : DASH, a ? a.n + ' ' + unit : '', '']);
+  }
+  avgTile('steps', 'Avg steps', function (n) { return Math.round(n).toLocaleString(); }, 'days');
+  avgTile('sleep', 'Avg sleep', function (n) { return round1(n) + ' hrs'; }, 'nights');
+  // every 1-10 score (Energy, Stress, Recovery (1-10), ...)
+  fields.filter(function (f) { return f.scale; }).forEach(function (f) {
+    var a = avgOf(days, f.key);
+    tiles.push(['Avg ' + scaleName(f).toLowerCase(), a ? round1(a.avg) + ' / 10' : DASH, a ? a.n + ' days' : '', '']);
+  });
+  tiles.push(['Days logged', logged + ' / 10', '', '']);
+  if (avgOf(days, 'recovery')) avgTile('recovery', 'Avg recovery', function (n) { return Math.round(n) + '%'; }, 'days');
+  if (avgOf(days, 'hrv')) avgTile('hrv', 'Avg HRV', function (n) { return Math.round(n) + ' ms'; }, 'days');
+  $('stats').innerHTML = tiles.map(function (t) {
+    return '<div class="stat"><span>' + t[0] + '</span><b class="' + t[3] + '">' + esc(t[1]) + '</b>' + (t[2] ? '<small>' + esc(t[2]) + '</small>' : '') + '</div>';
+  }).join('');
+}
+
+function renderDays(fields, days) {
+  var tagFields = fields.filter(function (f) { return f.type === 'select' || f.role === 'exercise' || f.role === 'nutrition' || f.role === 'water'; });
+  var shown = { weight: 1, notes: 1 };
+  tagFields.forEach(function (f) { shown[f.key] = 1; });
+  $('days').innerHTML = days.slice().reverse().map(function (d) {
+    var v = d.values || {};
+    var anything = Object.keys(v).some(function (k) { return has(v[k]); });
+    var title = niceDate(d.date, { weekday: 'short', month: 'short', day: 'numeric' }) + (d.date === todayKey ? '<em>Today</em>' : '');
+    if (!anything) {
+      return '<li class="day empty" data-date="' + d.date + '"><div class="day-top"><span class="day-date">' + title +
+        '</span></div><div class="day-line">Nothing logged ' + DASH + ' tap to add</div></li>';
+    }
+    var tags = tagFields.filter(function (f) { return has(v[f.key]); }).map(function (f) {
+      var suffix = f.role === 'water' && !/water/i.test(v[f.key]) ? ' water' : f.role === 'nutrition' && f.type === 'select' ? ' day' : '';
+      return '<span class="tag">' + esc(v[f.key]) + suffix + '</span>';
+    }).join('');
+    var line = [], wear = [];
+    fields.forEach(function (f) {
+      if (shown[f.key] || !has(v[f.key])) return;
+      var val = esc(v[f.key]), txt;
+      if (f.role === 'steps') txt = Math.round(num(v[f.key]) || 0).toLocaleString() + ' steps';
+      else if (f.role === 'sleep') txt = val + ' hrs sleep';
+      else if (f.scale) txt = esc(scaleName(f)) + ' ' + val + '/10';
+      else if (f.role === 'recovery') txt = 'Recovery ' + val + '%';
+      else if (f.role === 'hrv') txt = 'HRV ' + val;
+      else if (f.role === 'rhr') txt = 'RHR ' + val;
+      else if (f.role === 'strain') txt = 'Strain ' + val;
+      else txt = esc(f.label) + ': ' + val;
+      (f.wearable ? wear : line).push(txt);
+    });
+    var notesField = byRole(fields, 'notes');
+    var note = notesField && has(v[notesField.key]) ? v[notesField.key] : '';
+    return '<li class="day" data-date="' + d.date + '">' +
+      '<div class="day-top"><span class="day-date">' + title + '</span><span class="day-weight">' + (has(v.weight) ? esc(v.weight) + ' lb' : '') + '</span></div>' +
+      (tags ? '<div class="tags">' + tags + '</div>' : '') +
+      (line.length ? '<div class="day-line">' + line.join(DOT) + '</div>' : '') +
+      (wear.length ? '<div class="day-line">' + wear.join(DOT) + '</div>' : '') +
+      (note ? '<div class="day-note">' + esc(note) + '</div>' : '') + '</li>';
+  }).join('');
+  document.querySelectorAll('#days .day').forEach(function (li) {
+    li.onclick = function () { currentKey = li.dataset.date; showTab('checkin', true); };
+  });
+}
+
+function renderWeekly(w) {
+  if (!w.length) { $('weekly').innerHTML = '<p class="hint">Log your weight and your weekly averages will show up here.</p>'; return; }
+  var vals = w.map(function (x) { return x.avg; });
+  var min = Math.min.apply(null, vals), max = Math.max.apply(null, vals), span = (max - min) || 1;
+  var pts = w.map(function (x, i) {
+    return [w.length === 1 ? 150 : 8 + i * (284 / (w.length - 1)), 8 + (1 - (x.avg - min) / span) * 48];
+  });
+  var svg = '<svg class="spark" viewBox="0 0 300 64" role="img" aria-label="Weekly average weight trend">' +
+    '<polyline fill="none" stroke="#5D5C38" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" points="' +
+    pts.map(function (p) { return p.join(','); }).join(' ') + '"/>' +
+    pts.map(function (p) { return '<circle cx="' + p[0] + '" cy="' + p[1] + '" r="3.5" fill="#5D5C38"/>'; }).join('') + '</svg>';
+  var rows = w.slice().reverse().map(function (x, i, arr) {
+    var prev = arr[i + 1], diff = prev ? round1(x.avg - prev.avg) : null;
+    var change = diff === null ? '' : '<span class="' + (diff < 0 ? 'down' : diff > 0 ? 'up' : '') + '">' + (diff > 0 ? '+' : '') + diff + '</span>';
+    return '<tr><td>Week of ' + niceDate(x.weekOf, { month: 'short', day: 'numeric' }) + (x.days < 7 ? ' <span class="hint">(' + x.days + ' days)</span>' : '') +
+      '</td><td>' + x.avg + ' lb</td><td>' + change + '</td></tr>';
+  }).join('');
+  $('weekly').innerHTML = (w.length > 1 ? svg : '') + '<table class="weeks">' + rows + '</table>';
+}
+
+/* =====================================================================
+   Macros (weekly blocks)
+   ===================================================================== */
+function loadMacros() {
+  return call('getMacros', []).then(function (m) {
+    $('journalName').textContent = m.journalName || '';
+    renderWeeks(m.weeks || []);
+  });
+}
+
+function currentWeekIndex(weeks) {
+  var idx = -1;
+  weeks.forEach(function (w, i) {
+    if (w.start && w.start <= todayKey && todayKey <= w.end) idx = i;
+  });
+  if (idx < 0) weeks.forEach(function (w, i) { if (w.start && w.start <= todayKey) idx = i; });
+  return idx;
+}
+
+function renderWeeks(weeks) {
+  if (!weeks.length) { $('weeks').innerHTML = '<p class="hint" style="text-align:center">Jess hasn\'t added your weekly macros yet.</p>'; return; }
+  var cur = currentWeekIndex(weeks);
+  $('weeks').innerHTML = weeks.map(function (w, i) {
+    var tiles = [['Calories', w.calories || DASH, '']];
+    w.macros.forEach(function (m) {
+      var cals = m.values[1] ? m.values[1] + ' cal' : '';
+      tiles.push([m.label, m.values[0] || DASH, cals]);
+    });
+    var stats = '<div class="stats">' + tiles.map(function (t) {
+      return '<div class="stat"><span>' + esc(t[0]) + '</span><b>' + esc(t[1]) + '</b>' + (t[2] ? '<small>' + esc(t[2]) + '</small>' : '') + '</div>';
+    }).join('') + '</div>';
+    var grams = w.mealHeaders.map(function (h) { return /\(g\)/i.test(h); });
+    var head = '<tr><th>Meal</th>' + w.mealHeaders.map(function (h) { return '<th>' + esc(h.replace(/\s*\(g\)/i, '')) + '</th>'; }).join('') + '</tr>';
+    function row(r, cls) {
+      var label = esc(r.label).replace(/\s*(\([^)]*\))/, ' <small>$1</small>');
+      return '<tr class="' + (cls || '') + '"><td>' + label + '</td>' + r.values.map(function (v, j) {
+        return '<td>' + esc(v) + (v && grams[j] ? 'g' : '') + '</td>';
+      }).join('') + '</tr>';
+    }
+    var meals = w.meals.length
+      ? '<h3>Suggested by meal</h3><table class="meals">' + head + w.meals.map(function (r) { return row(r); }).join('') +
+        (w.total ? row({ label: 'Total', values: w.total.values }, 'total') : '') + '</table>'
+      : '';
+    return '<details class="card week"' + (i === cur || (cur < 0 && i === 0) ? ' open' : '') + '><summary><div>' +
+      '<div class="week-name">' + esc(w.week || 'Week ' + (i + 1)) + (i === cur ? '<span class="badge">This week</span>' : '') + '</div>' +
+      '<div class="week-sub">' + esc(w.title) + (w.calories ? DOT + esc(w.calories) + ' cal' : '') + '</div>' +
+      '</div></summary><div class="week-body"><h3>Daily targets</h3>' + stats + meals + '</div></details>';
+  }).join('');
+}
+
+/* =====================================================================
+   Photos
+   ===================================================================== */
+var ANGLES = ['front', 'back', 'side'];
+var picked = {};
+var CAMERA = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>';
+
+function loadPhotos() {
+  picked = {};
+  renderShots();
+  return call('getPhotos', []).then(renderRecent);
+}
+
+function renderShots() {
+  $('shots').innerHTML = ANGLES.map(function (a) {
+    var name = a.charAt(0).toUpperCase() + a.slice(1);
+    var p = picked[a];
+    return '<label class="shot' + (p ? ' has' : '') + '">' +
+      (p ? '<img src="' + p.preview + '" alt="' + name + ' photo"><span class="label">' + name + '</span>' : CAMERA + name) +
+      '<input type="file" accept="image/*" data-angle="' + a + '"></label>';
+  }).join('');
+  document.querySelectorAll('#shots input').forEach(function (inp) {
+    inp.addEventListener('change', function () {
+      var f = inp.files && inp.files[0]; if (!f) return;
+      setStatus('Preparing' + ELLIPSIS);
+      prepare(f).then(function (p) { picked[inp.dataset.angle] = p; markDirty(); renderShots(); updateSaveEnabled(); })
+        .catch(function () { setStatus('Couldn\'t read that photo', 'err'); });
+    });
+  });
+  updateSaveEnabled();
+}
+
+function renderRecent(r) {
+  var list = (r && r.recent) || [];
+  $('recentPhotos').innerHTML = list.length
+    ? list.map(function (x) { return '<li><span>' + esc(niceDate(x.label)) + '</span><span class="hint">saved</span></li>'; }).join('')
+    : '<li class="hint">No photos yet.</li>';
+}
+
+/* Shrink photos on the phone before sending: a small copy for the sheet
+   (sheets limit image size) and a larger one for the Drive folder. */
+function prepare(file) {
+  return new Promise(function (resolve, reject) {
+    var url = URL.createObjectURL(file);
+    var img = new Image();
+    img.onload = function () {
+      function jpeg(maxSide, q) {
+        var s = Math.min(1, maxSide / Math.max(img.naturalWidth, img.naturalHeight));
+        var c = document.createElement('canvas');
+        c.width = Math.round(img.naturalWidth * s); c.height = Math.round(img.naturalHeight * s);
+        c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+        return c.toDataURL('image/jpeg', q);
+      }
+      var sheet = jpeg(1000, 0.82), full = jpeg(2000, 0.85);
+      URL.revokeObjectURL(url);
+      resolve({ preview: sheet, sheet: sheet.split(',')[1], full: full.split(',')[1] });
+    };
+    img.onerror = function () { URL.revokeObjectURL(url); reject(); };
+    img.src = url;
+  });
+}
+
+function savePhotos() {
+  var payload = {};
+  Object.keys(picked).forEach(function (a) { payload[a] = { sheet: picked[a].sheet, full: picked[a].full }; });
+  return call('savePhotos', [currentKey, payload]).then(function (r) { picked = {}; dirty = false; renderShots(); renderRecent(r); });
+}
+
+/* =====================================================================
+   Save button + navigation
+   ===================================================================== */
+function updateSaveEnabled() {
+  $('save').disabled = tab === 'checkin' ? !(journal && journal.dateInSheet) : !Object.keys(picked).length;
+}
+
+$('save').onclick = function () {
+  $('save').disabled = true;
+  setStatus((tab === 'photos' ? 'Uploading' : 'Saving') + ELLIPSIS);
+  var p = tab === 'checkin' ? saveCheckin() : savePhotos();
+  p.then(function () { dirty = false; setStatus((tab === 'photos' ? 'Uploaded ' : 'Saved ') + CHECK, 'ok'); })
+   .catch(function (e) {
+     setStatus('Not saved', 'err');
+     var msg = e && e.message && !/fetch|network|load failed/i.test(e.message) ? e.message : 'Couldn\'t reach your journal. Check your internet connection and try again.';
+     alert(msg);
+   })
+   .finally(updateSaveEnabled);
+};
+
+function go(delta) {
+  if (!okToLeave()) return;
+  var d = fromKey(currentKey); d.setDate(d.getDate() + delta);
+  load(keyOf(d));
+}
+$('prev').onclick = function () { go(-1); };
+$('next').onclick = function () { go(1); };
+$('todayLink').onclick = function () { if (okToLeave()) load(todayKey); };
+document.querySelectorAll('.tab').forEach(function (b) { b.onclick = function () { showTab(b.dataset.tab); }; });
+window.addEventListener('beforeunload', function (e) { if (dirty) { e.preventDefault(); e.returnValue = ''; } });
+
+/* =====================================================================
+   Start-up: which client, demo, or Jess's link maker
+   ===================================================================== */
+(function start() {
+  function lsGet(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+  function lsSet(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+  function validId(id) { return /^[A-Za-z0-9_-]{20,200}$/.test(id || ''); }
   var params = new URLSearchParams(location.search);
 
-  // Jess's link maker
   if (params.has('make')) {
-    show('make');
-    var input = document.getElementById('makeInput');
+    $('make').hidden = false;
+    var input = $('makeInput');
     input.addEventListener('input', function () {
-      var m = input.value.trim().match(/script\.google\.com\/(?:a\/[^/]+\/)?macros\/s\/([A-Za-z0-9_-]+)\/exec/);
-      var ok = m && valid(m[1]);
-      document.getElementById('makeOut').hidden = !ok;
-      document.getElementById('makeErr').hidden = ok || !input.value.trim();
-      if (ok) document.getElementById('makeLink').textContent = location.origin + '/journal/#' + m[1];
+      var m = input.value.trim().match(/script\.google\.com\/(?:a\/[^\/]+\/)?macros\/s\/([A-Za-z0-9_-]+)\/exec/);
+      var ok = !!(m && validId(m[1]));
+      $('makeOut').hidden = !ok;
+      $('makeErr').hidden = ok || !input.value.trim();
+      if (ok) $('makeLink').textContent = location.origin + '/journal/#' + m[1];
     });
-    document.getElementById('copyBtn').addEventListener('click', function () {
-      var text = document.getElementById('makeLink').textContent, btn = this;
+    $('copyBtn').addEventListener('click', function () {
+      var text = $('makeLink').textContent, btn = this;
       (navigator.clipboard ? navigator.clipboard.writeText(text) : Promise.reject())
         .then(function () { btn.textContent = 'Copied'; setTimeout(function () { btn.textContent = 'Copy link'; }, 1500); })
         .catch(function () { window.prompt('Copy this link:', text); });
@@ -160,32 +888,34 @@
     return;
   }
 
-  // Client: the ID comes from the part after #. Android shortcuts can drop it,
-  // so it's also remembered on this phone as a backup.
   var id = location.hash.slice(1);
-  if (valid(id)) set(KEY_ID, id); else id = get(KEY_ID);
-  if (!valid(id)) { show('nolink'); return; }
-
-  var url = appUrl(id);
-  ['openBtn', 'openBtn2'].forEach(function (b) {
-    var a = document.getElementById(b);
-    a.href = url;
-    a.addEventListener('click', function () { set(KEY_OPENED, '1'); });
-  });
-
-  if (get(KEY_OPENED) && !params.has('setup')) {
-    show('opening');
-    location.replace(url);
-    return;
+  if (id === 'demo') {
+    DEMO = true;
+  } else {
+    // Some home-screen shortcuts drop the part after #, so it's remembered on the phone too.
+    if (validId(id)) lsSet('fwj-journal-id', id); else id = lsGet('fwj-journal-id');
+    if (!validId(id)) { $('nolink').hidden = false; return; }
+    if (location.hash.slice(1) !== id) history.replaceState(null, '', '#' + id);
+    API = 'https://script.google.com/macros/s/' + id + '/exec';
   }
 
-  show('welcome');
-  var ua = navigator.userAgent;
-  var isIOS = /iPhone|iPad|iPod/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
-  var isAndroid = /Android/.test(ua);
-  if (isIOS) document.getElementById('stepsAndroid').hidden = true;
-  if (isAndroid) document.getElementById('stepsIphone').hidden = true;
+  var standalone = navigator.standalone || (window.matchMedia && matchMedia('(display-mode: standalone)').matches);
+  if (!standalone && !lsGet('fwj-tip-done')) {
+    var ua = navigator.userAgent;
+    var isIOS = /iPhone|iPad|iPod/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
+    var isAndroid = /Android/.test(ua);
+    if (isIOS || isAndroid) {
+      $('installTip').hidden = false;
+      $('tipIphone').hidden = !isIOS;
+      $('tipAndroid').hidden = !isAndroid;
+      $('tipClose').onclick = function () { $('installTip').hidden = true; lsSet('fwj-tip-done', '1'); };
+    }
+  }
+
+  $('app').hidden = false;
+  load(todayKey);
 })();
+
 </script>
 </body>
 </html>
