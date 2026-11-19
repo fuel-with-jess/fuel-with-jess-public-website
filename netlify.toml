@@ -20,6 +20,13 @@
   [headers.values]
     X-Robots-Tag = "noindex"
 
+# Journal launch page (/journal/): gives each client's journal app a
+# home-screen icon. Client links are private, so keep it out of Google.
+[[headers]]
+  for = "/journal/*"
+  [headers.values]
+    X-Robots-Tag = "noindex"
+
 # Short, easy-to-type link for social posts: fuelwithjess.com/macros
 # jumps straight to the Starter Guide sign-up box on the macros blog post.
 # 302 (temporary) so the destination can be changed later without browsers

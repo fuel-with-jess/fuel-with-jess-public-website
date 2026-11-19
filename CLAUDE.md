@@ -21,6 +21,8 @@ intake.html           New client intake form (20+ questions, ~10-15 min)
 legal.html            Terms / Privacy / Coaching Agreement / Waiver (tabbed)
 clients/index.html    Client Resources (served at /clients/). Password protected, linked as "Client Login" in every footer.
 netlify/edge-functions/client-gate.js  The password check for everything under /clients/.
+journal/index.html    Journal launch page (served at /journal/). Gives clients' journal apps a flame home-screen icon. Not linked anywhere, hidden from Google.
+journal/*.png, icon.svg  The journal home-screen icons (flame on black).
 blog/index.html       Blog home (served at /blog/). Lists every post.
 blog/*.html           Blog posts (e.g. blog/how-to-count-macros-beginners.html → /blog/how-to-count-macros-beginners)
 css/styles.css        All styling. Color palette is at the top in :root.
@@ -45,6 +47,8 @@ netlify.toml          Netlify settings (image caching for 7 days, keep downloads
 
 - **Client Resources password:** set in Netlify as the environment variable `CLIENT_RESOURCES_PASSWORD`, never in this repo (the repo is public on GitHub). To change it: update the variable, trigger a new deploy, send the new password to current clients. Old logins stop working automatically.
 - **Add a client guide:** the guide PDFs live in Jess's Google Drive, shared as "Anyone with the link" (Viewer). Add a card to `clients/index.html` pointing at the Drive link. Don't commit guide files to this repo; it's public on GitHub.
+
+- **Client journal app links:** each client's journal app is a Google Apps Script web app inside their journal sheet (the code lives there, not in this repo). Send clients `https://fuelwithjess.com/journal/#<ID>` instead of the script.google.com link so their home-screen icon is the flame. Make the link at `https://fuelwithjess.com/journal/?make` by pasting the Web app URL. Never commit client links; the repo is public.
 
 - **Add a blog post:** copy an existing file in `blog/`, swap the `<article>` content, update the `<title>`, description, canonical URL and the JSON-LD block, then add a card for it to `blog/index.html` (and its `blogPost` entry in that page's JSON-LD) and a line to `sitemap.xml`. Pages in `blog/` use root paths (`/css/styles.css`, `/about.html`) because they live in a subfolder.
 
