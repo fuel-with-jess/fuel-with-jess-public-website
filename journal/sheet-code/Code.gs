@@ -320,8 +320,10 @@ function readWeeks_() {
     if (mode === 'macros') cur.macros.push(line);
     else if (mode === 'meals') { if (/^total/i.test(label)) { cur.total = line; mode = ''; } else cur.meals.push(line); }
   });
-  // drop unfilled templates (e.g. "DAILY NUTRITION TARGETS: DATE" with no numbers)
-  return weeks.filter(function (w) { return w.start || w.calories; });
+  // Keep only real macro blocks: they need a Macro table or a meal table.
+  // (Drops empty templates like "DAILY NUTRITION TARGETS: DATE", and dated
+  // Calories/Carbs/Fat/Protein tables, which readTargetTables_ handles.)
+  return weeks.filter(function (w) { return (w.start || w.calories) && (w.macros.length || w.meals.length); });
 }
 
 /** The week block covering this date, else the latest one that has started. */
