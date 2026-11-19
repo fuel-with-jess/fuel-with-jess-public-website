@@ -137,6 +137,7 @@
   .meals th { font-size: 10px; text-transform: uppercase; letter-spacing: .08em; color: var(--sage-lt); font-weight: 600; text-align: right; padding: 0 0 6px; }
   .meals td { padding: 8px 0; border-top: 1px solid var(--sand); text-align: right; }
   .meals th:first-child, .meals td:first-child { text-align: left; }
+  .meals th + th, .meals td + td { padding-left: 12px; white-space: nowrap; }
   .meals tr.total td { font-weight: 700; border-top: 2px solid var(--sand); }
   .meals small { color: var(--sage-lt); font-size: 12px; }
 
@@ -265,7 +266,7 @@
 
   <!-- ================= MACROS (weekly blocks from the sheet's Macros tab) ================= -->
   <main id="macros" class="panel" hidden>
-    <h1 class="page-title">Your weekly macros</h1>
+    <h1 class="page-title" id="macrosTitle">Your weekly macros</h1>
     <div id="weeks"></div>
   </main>
 
@@ -331,6 +332,7 @@ function call(fn, args) {
 var MOCK = (function () {
   var el = /layout=el/.test(location.search);
   var dn = /layout=dn/.test(location.search);
+  var hl = /layout=hl/.test(location.search);
   var cj = el || dn || /layout=cj/.test(location.search);
   function shift(k, n) { var d = fromKey(k); d.setDate(d.getDate() + n); return keyOf(d); }
   var t = keyOf(new Date());
@@ -422,10 +424,19 @@ var MOCK = (function () {
       total: { label: 'TOTAL', values: [String(c), '60', '155'] } };
   });
   var name = cj ? 'CJ Daily Journal (sample)' : 'My Daily Journal (sample)';
+  if (hl) {
+    macroWeeks = [{ title: '11/2/2026', start: '2026-11-02', end: '', week: '', calories: '2,105', macroHeaders: ['Grams', '%'],
+      macros: [{ label: 'Carbohydrates', values: ['220', '0.41'] }, { label: 'Fats', values: ['65', '0.278'] }, { label: 'Protein', values: ['160', '0.304'] }],
+      mealHeaders: ['Carbs (g)', 'Fat (g)', 'Protein (g)'],
+      meals: [{ label: 'Pre-Workout Snack', values: ['45', '3', '10'] }, { label: 'Meal 1 (Ideally post-workout)', values: ['70', '18', '50'] },
+        { label: 'Meal 2', values: ['55', '22', '50'] }, { label: 'Meal 3', values: ['50', '22', '50'] }],
+      total: { label: 'TOTAL', values: ['220', '65', '160'] } }];
+    name = 'Hillary Daily Journal (sample)';
+  }
   var links = el ? [{ label: 'Weekly Client Check In Form', url: 'https://example.com/form' }] : [];
   if (el) name = 'Elliott Daily Journal (sample)';
   if (dn) name = 'Denise Daily Tracker (sample)';
-  function get(k) { return { journalName: name, targets: targets, fields: fields, entry: store[k] || {}, dateInSheet: true, hasMacros: cj && !el, links: links }; }
+  function get(k) { return { journalName: name, targets: targets, fields: fields, entry: store[k] || {}, dateInSheet: true, hasMacros: (cj && !el) || hl, links: links }; }
   return {
     getJournal: get,
     saveCheckIn: function (k, v) { store[k] = v; return get(k); },
@@ -733,11 +744,23 @@ function currentWeekIndex(weeks) {
 function renderWeeks(weeks) {
   if (!weeks.length) { $('weeks').innerHTML = '<p class="hint" style="text-align:center">Jess hasn\'t added your weekly macros yet.</p>'; return; }
   var cur = currentWeekIndex(weeks);
+  $('macrosTitle').textContent = weeks.length === 1 ? 'Your macros' : 'Your weekly macros';
   $('weeks').innerHTML = weeks.map(function (w, i) {
+    // Columns can be Grams/Macros, Calories and/or % depending on the journal.
+    var hs = w.macroHeaders || [];
+    function col(re) { for (var c = 0; c < hs.length; c++) if (re.test(hs[c])) return c; return -1; }
+    var gi = col(/gram|macro/i), ci = col(/cal/i), pi = col(/%|percent/i);
+    if (gi < 0) gi = 0;
     var tiles = [['Calories', w.calories || DASH, '']];
     w.macros.forEach(function (m) {
-      var cals = m.values[1] ? m.values[1] + ' cal' : '';
-      tiles.push([m.label, m.values[0] || DASH, cals]);
+      var g = String(m.values[gi] || ''), sub = '';
+      if (/^\d+(\.\d+)?$/.test(g)) g += 'g';
+      if (ci >= 0 && ci !== gi && m.values[ci]) sub = m.values[ci] + ' cal';
+      else if (pi >= 0 && pi !== gi && m.values[pi]) {
+        var pv = String(m.values[pi]), n = parseFloat(pv);
+        sub = /%/.test(pv) ? pv : !isNaN(n) ? Math.round(n <= 1 ? n * 100 : n) + '% of calories' : pv;
+      }
+      tiles.push([m.label, g || DASH, sub]);
     });
     var stats = '<div class="stats">' + tiles.map(function (t) {
       return '<div class="stat"><span>' + esc(t[0]) + '</span><b>' + esc(t[1]) + '</b>' + (t[2] ? '<small>' + esc(t[2]) + '</small>' : '') + '</div>';
@@ -755,8 +778,9 @@ function renderWeeks(weeks) {
         (w.total ? row({ label: 'Total', values: w.total.values }, 'total') : '') + '</table>'
       : '';
     return '<details class="card week"' + (i === cur || (cur < 0 && i === 0) ? ' open' : '') + '><summary><div>' +
-      '<div class="week-name">' + esc(w.week || 'Week ' + (i + 1)) + (i === cur ? '<span class="badge">This week</span>' : '') + '</div>' +
-      '<div class="week-sub">' + esc(w.title) + (w.calories ? DOT + esc(w.calories) + ' cal' : '') + '</div>' +
+      '<div class="week-name">' + esc(w.week || (weeks.length === 1 ? 'Your targets' : 'Week ' + (i + 1))) +
+        (i === cur && w.end ? '<span class="badge">This week</span>' : '') + '</div>' +
+      '<div class="week-sub">' + esc(w.start && !w.end ? 'Starting ' + niceDate(w.start) : w.title) + (w.calories ? DOT + esc(w.calories) + ' cal' : '') + '</div>' +
       '</div></summary><div class="week-body"><h3>Daily targets</h3>' + stats + meals + '</div></details>';
   }).join('');
 }
