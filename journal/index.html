@@ -462,7 +462,11 @@ function fromKey(k) { var p = k.split('-'); return new Date(+p[0], +p[1] - 1, +p
 function niceDate(k, opts) { return /^\d{4}-\d{2}-\d{2}$/.test(k) ? fromKey(k).toLocaleDateString(undefined, opts || { month: 'short', day: 'numeric', year: 'numeric' }) : k; }
 function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
 function has(v) { return v !== undefined && v !== null && String(v).trim() !== ''; }
-function num(v) { var n = parseFloat(String(v).replace(/,/g, '')); return isNaN(n) ? null : n; }
+function num(v) {
+  var t = String(v).trim().match(/^(\d{1,2}):([0-5]\d)$/); // "6:28" -> 6.47 hours
+  if (t) return Number(t[1]) + Number(t[2]) / 60;
+  var n = parseFloat(String(v).replace(/,/g, '')); return isNaN(n) ? null : n;
+}
 function round1(n) { return Math.round(n * 10) / 10; }
 function byRole(fields, role) { return (fields || []).filter(function (f) { return f.role === role; })[0]; }
 var $ = function (id) { return document.getElementById(id); };
@@ -538,6 +542,7 @@ function fieldHtml(f, value) {
     return '<div class="full">' + lab + '<textarea id="' + id + '" data-k="' + f.key + '" placeholder="' + ph + '">' + esc(v) + '</textarea></div>';
   }
   var mode = f.type === 'number' ? (f.role === 'steps' || f.role === 'rhr' ? 'numeric' : 'decimal') : 'text';
+  if (f.time) { mode = 'text'; if (!f.hint) ph = 'e.g. 7:30'; } // hours:minutes needs the colon key
   var list = '', listAttr = '';
   if (f.suggestions && f.suggestions.length) {
     listAttr = ' list="dl_' + f.key + '" autocomplete="off"';
@@ -679,7 +684,7 @@ function renderDays(fields, days) {
       if (shown[f.key] || !has(v[f.key])) return;
       var val = esc(v[f.key]), txt;
       if (f.role === 'steps') txt = Math.round(num(v[f.key]) || 0).toLocaleString() + ' steps';
-      else if (f.role === 'sleep') txt = val + ' hrs sleep';
+      else if (f.role === 'sleep') txt = val + (/:/.test(val) ? ' sleep' : ' hrs sleep');
       else if (f.scale) txt = esc(scaleName(f)) + ' ' + val + '/10';
       else if (f.role === 'recovery') txt = 'Recovery ' + val + '%';
       else if (f.role === 'hrv') txt = 'HRV ' + val;

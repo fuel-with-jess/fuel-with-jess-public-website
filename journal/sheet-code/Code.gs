@@ -114,13 +114,32 @@ function sheet_(name) {
   if (!s) throw new Error('Could not find a tab named "' + name + '".');
   return s;
 }
-function toCellValue_(v) {
-  if (v === undefined || v === null) return '';
-  if (typeof v !== 'string') return v;
-  v = v.trim();
-  const asNum = v.replace(/,/g, '');
-  return asNum !== '' && !isNaN(asNum) ? Number(asNum) : v;
+/**
+ * Writes one check-in value without letting Sheets guess wrong:
+ *  - "6:30" in a number column (e.g. sleep) is saved as a time, shown 6:30
+ *  - plain numbers are saved as numbers; if the cell had a date/time look,
+ *    it's reset so 6.5 doesn't show up as a date or "156:00"
+ *  - everything else is saved as plain text, so notes like "1/2 cup" or
+ *    "3-4" never turn into dates
+ */
+function writeCell_(cell, f, raw) {
+  const v = raw === undefined || raw === null ? '' : String(raw).trim();
+  if (v === '') { cell.setValue(''); return; }
+  const t = v.match(/^(\d{1,2}):([0-5]\d)$/);
+  if (f.type === 'number' && t) {
+    cell.setNumberFormat('[h]:mm').setValue((Number(t[1]) + Number(t[2]) / 60) / 24);
+    return;
+  }
+  const n = v.replace(/,/g, '');
+  if (f.type !== 'long' && n !== '' && !isNaN(n)) {
+    const fmt = String(cell.getNumberFormat() || '');
+    if (fmt !== '@' && /[ydhs]/i.test(fmt.replace(/General/i, ''))) cell.setNumberFormat('0.##');
+    cell.setValue(Number(n));
+    return;
+  }
+  cell.setNumberFormat('@').setValue(v);
 }
+
 function withLock_(fn) {
   const lock = LockService.getDocumentLock();
   lock.waitLock(20000);
@@ -187,15 +206,18 @@ function readEntries_(layout) {
   const first = layout.headerRow + 1;
   const n = sheet.getLastRow() - layout.headerRow;
   if (n < 1) return [];
-  const data = sheet.getRange(first, 1, n, sheet.getLastColumn()).getValues();
+  const range = sheet.getRange(first, 1, n, sheet.getLastColumn());
+  const data = range.getValues();
+  // Field values are read as shown in the sheet ("6:28", "10,398"), so times
+  // and other formatted cells come through the way the client typed them.
+  const shown = range.getDisplayValues();
   const out = [];
   data.forEach(function (rowVals, i) {
     const d = rowVals[0];
     if (!(d instanceof Date)) return; // skips the weekly-average rows
     const values = {};
     layout.fields.forEach(function (f) {
-      const v = rowVals[f.col - 1];
-      values[f.key] = v instanceof Date ? dayKey_(v) : v;
+      values[f.key] = String(shown[i][f.col - 1]).trim();
     });
     out.push({ row: first + i, key: dayKey_(d), values: values });
   });
@@ -213,6 +235,10 @@ function addDropdowns_(layout, entries) {
         if (v && v.length <= 30 && seen.indexOf(v) < 0) seen.push(v);
       });
       if (seen.length && seen.length <= 8) f.suggestions = seen;
+    }
+    // Number columns the client fills in as hours:minutes (e.g. sleep "6:28")
+    if (f.type === 'number' && entries.some(function (e) { return /^\d{1,2}:[0-5]\d$/.test(String(e.values[f.key] || '')); })) {
+      f.time = true;
     }
     let options = null;
     try {
@@ -433,7 +459,7 @@ function readTargetTables_(sheet) {
 function weeklyAverages_(entries) {
   const weeks = {};
   entries.forEach(function (e) {
-    const w = Number(e.values.weight);
+    const w = Number(String(e.values.weight).replace(/,/g, ''));
     if (!w) return;
     const k = addDays_(e.key, -((weekday_(e.key) + 6) % 7)); // Monday of that week
     (weeks[k] = weeks[k] || []).push(w);
@@ -477,7 +503,7 @@ function saveCheckIn(dateKey, values) {
     layout.fields.forEach(function (f) {
       if (!(f.key in values)) return;
       if (formulas[f.col - 1]) return; // never overwrite a formula
-      sheet.getRange(match.row, f.col).setValue(toCellValue_(values[f.key]));
+      writeCell_(sheet.getRange(match.row, f.col), f, values[f.key]);
     });
     SpreadsheetApp.flush();
     return getJournal(dateKey);
