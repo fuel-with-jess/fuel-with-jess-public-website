@@ -18,6 +18,7 @@ testimonials.html     Client testimonials
 contact.html          Ways to connect + next-step CTAs
 apply.html            New client application form (5 questions, ~3-5 min)
 intake.html           New client intake form (20+ questions, ~10-15 min)
+workshop-request.html Corporate workshop request form (linked from the workshops page buttons)
 legal.html            Terms / Privacy / Coaching Agreement / Waiver (tabbed)
 clients/index.html    Client Resources (served at /clients/). Password protected, linked as "Client Login" in every footer.
 netlify/edge-functions/client-gate.js  The password check for everything under /clients/.
