@@ -219,3 +219,77 @@ let scaleValues = {};
       }
     }
   }
+  // ── WORKSHOP REQUEST FORM (workshop-request.html) ──
+  function workshopFormUpdateProgress() {
+    let complete = 0;
+    const total = 5;
+    const f = document.getElementById('ws-q-first');
+    const em = document.getElementById('ws-q-email');
+    if (f && f.value.trim() && em && em.value.trim()) complete++;
+    const c = document.getElementById('ws-q-company');
+    if (c && c.value.trim()) complete++;
+    if (document.querySelector('input[name="ws-size"]:checked')) complete++;
+    if (document.querySelector('input[name="ws-format"]:checked')) complete++;
+    if (document.querySelector('input[name="ws-timing"]:checked')) complete++;
+    const pct = Math.round((complete / total) * 100);
+    const pb = document.getElementById('workshopform-progress-bar');
+    const pl = document.getElementById('workshopform-progress-label');
+    if (pb) pb.style.width = pct + '%';
+    if (pl) pl.textContent = complete + ' of ' + total + ' complete';
+  }
+
+  function submitWorkshopRequest(e) {
+    const val = (id) => { const el = document.getElementById(id); return el ? el.value.trim() : ''; };
+    const picked = (name) => { const el = document.querySelector('input[name="' + name + '"]:checked'); return el ? el.value : ''; };
+    const first = val('ws-q-first');
+    const email = val('ws-q-email');
+    const company = val('ws-q-company');
+
+    if (!first || !email) { highlight('ws-q-first'); return; }
+    if (!email.includes('@')) { highlight('ws-q-email'); return; }
+    if (!company) { highlight('ws-q-company'); return; }
+
+    const btn = e.target;
+    btn.textContent = 'Sending…';
+    btn.disabled = true;
+
+    const data = {
+      '_subject': 'New Workshop Request — ' + company,
+      'Form': 'Corporate workshop request',
+      'First name': first,
+      'Last name': val('ws-q-last'),
+      'Email': email,
+      'Phone': val('ws-q-phone'),
+      'Role': val('ws-q-role'),
+      'Company': company,
+      'Office location': val('ws-q-location'),
+      'Group size': picked('ws-size'),
+      'Format': picked('ws-format'),
+      'Topics': [...document.querySelectorAll('#ws-topics-group input:checked')].map(i => i.value).join(', '),
+      'Goals for the workshop': val('ws-q-goals'),
+      'Timing': picked('ws-timing'),
+      'Preferred dates': val('ws-q-dates'),
+      'Anything else': val('ws-q-extra')
+    };
+    fetch(FORMSPREE_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify(data)
+    }).then(res => {
+      if (res.ok) {
+        document.getElementById('workshopform-body').style.display = 'none';
+        const done = document.getElementById('workshopform-success');
+        done.style.display = 'block';
+        done.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      } else { throw new Error(); }
+    }).catch(() => {
+      btn.textContent = 'Something went wrong — please try again';
+      btn.disabled = false;
+      btn.style.background = '#c0392b';
+    });
+  }
+
+  // Pill taps don't always fire "change" (e.g. re-tapping a radio), so recount after any tap.
+  document.addEventListener('click', function(e) {
+    if (e.target.closest && e.target.closest('#workshopform-body .pill-opt')) setTimeout(workshopFormUpdateProgress, 0);
+  });
